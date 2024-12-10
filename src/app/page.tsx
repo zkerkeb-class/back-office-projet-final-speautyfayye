@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { AppDispatch, RootState } from '@/store';
 import { clearSelectedPlaylist, fetchPlaylist } from '@/store/slices/playlistSlice';
@@ -91,19 +91,19 @@ export default function Home() {
           Go to nextjs.org →
         </a>
         <div>
-      <h1>Artist Details</h1>
-      <button onClick={() => handleFetchPlaylist('1')}>Load Artist</button>
-      <button onClick={() => dispatch(clearSelectedPlaylist())}>Clear</button>
+          <h1>Artist Details</h1>
+          <button onClick={() => handleFetchPlaylist('1')}>Load Artist</button>
+          <button onClick={() => dispatch(clearSelectedPlaylist())}>Clear</button>
 
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
-      {playlist && (
-        <div>
-          <h2>{playlist.title}</h2>
-          <p>userId: {playlist.user_id}</p>
+          {loading && <p>Loading...</p>}
+          {error && <p>Error: {error}</p>}
+          {playlist && (
+            <div>
+              <h2>{playlist.title}</h2>
+              <p>userId: {playlist.user_id}</p>
+            </div>
+          )}
         </div>
-      )}
-    </div>
       </footer>
     </div>
   );

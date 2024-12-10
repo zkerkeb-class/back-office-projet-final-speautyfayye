@@ -1,6 +1,5 @@
-import { API_ROUTES } from "@/utils/constants";
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { env } from "process";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { env } from 'process';
 
 interface Artist {
   id: number;
@@ -33,10 +32,10 @@ export const fetchArtist = createAsyncThunk(
         throw new Error('Failed to fetch artist');
       }
       return (await response.json()) as Artist; // Retourne l'artiste
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    } catch (error) {
+      return rejectWithValue(error);
     }
-  }
+  },
 );
 
 const selectedArtistSlice = createSlice({
@@ -48,7 +47,7 @@ const selectedArtistSlice = createSlice({
       state.artist = null;
       state.loading = false;
       state.error = null;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -62,9 +61,9 @@ const selectedArtistSlice = createSlice({
       })
       .addCase(fetchArtist.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string || 'Failed to fetch artist';
+        state.error = (action.payload as string) || 'Failed to fetch artist';
       });
-  }
+  },
 });
 
 export default selectedArtistSlice.reducer;

@@ -1,6 +1,6 @@
-import { API_ROUTES } from "@/utils/constants";
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Track } from "./trackSlice";
+import { API_ROUTES } from '@/utils/constants';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { Track } from './trackSlice';
 
 interface Playlist {
   id: number;
@@ -27,18 +27,23 @@ export const fetchPlaylist = createAsyncThunk(
   'selectedPlaylist/fetchPlaylist',
   async (PlaylistId: string, { rejectWithValue }) => {
     try {
-        console.log("🚀 ~ URL:", `${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.PLAYLIST}${PlaylistId}`);
-        
-      const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.PLAYLIST}${PlaylistId}`); // Appel API
+      console.log(
+        '🚀 ~ URL:',
+        `${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.PLAYLIST}${PlaylistId}`,
+      );
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.PLAYLIST}${PlaylistId}`,
+      ); // Appel API
       if (!response.ok) {
         throw new Error('Failed to fetch playlist');
       }
       const data = await response.json();
       return data.data as Playlist; // Retourne l'Playlist
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    } catch (error) {
+      return rejectWithValue(error);
     }
-  }
+  },
 );
 
 const selectedPlaylistSlice = createSlice({
@@ -50,7 +55,7 @@ const selectedPlaylistSlice = createSlice({
       state.playlist = null;
       state.loading = false;
       state.error = null;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -64,9 +69,9 @@ const selectedPlaylistSlice = createSlice({
       })
       .addCase(fetchPlaylist.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string || 'Failed to fetch playlist';
+        state.error = (action.payload as string) || 'Failed to fetch playlist';
       });
-  }
+  },
 });
 
 export default selectedPlaylistSlice.reducer;
