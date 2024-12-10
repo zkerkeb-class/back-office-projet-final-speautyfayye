@@ -1,7 +1,19 @@
+"use client"
+
+import { AppDispatch, RootState } from '@/store';
+import { clearSelectedPlaylist, fetchPlaylist } from '@/store/slices/playlistSlice';
 import Image from 'next/image';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function Home() {
-  // const title = 'Speautyfayye';
+  const title = 'Speautyfayye';
+  const { playlist, loading, error } = useSelector((state: RootState) => state.selectedPlaylist);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleFetchPlaylist = (playlistId: string) => {
+    dispatch(fetchPlaylist(playlistId));
+  };
+
   return (
     <div className="min-h-screen·grid-rows-[20px_1fr_20px]·items-center·justify-items-center·gap-16·p-8·pb-20·font-[family-name:var(--font-geist-sans)]·sm:p-20">
       <main className="row-start-2·flex·flex-col·items-center·gap-8">
@@ -13,6 +25,7 @@ export default function Home() {
           height={38}
           priority
         />
+        <p>{title}</p>
         <ol className="center·font-[family-name:var(--font-geist-mono)]·text-sm·sm:text-left">
           <li className="mb-2">
             <code className="rounded·bg-black/[.05]·px-1·py-0.5·font-semibold·dark:bg-white/[.06]">
@@ -77,6 +90,20 @@ export default function Home() {
           <Image aria-hidden src="/globe.svg" alt="Globe icon" width={16} height={16} />
           Go to nextjs.org →
         </a>
+        <div>
+      <h1>Artist Details</h1>
+      <button onClick={() => handleFetchPlaylist('1')}>Load Artist</button>
+      <button onClick={() => dispatch(clearSelectedPlaylist())}>Clear</button>
+
+      {loading && <p>Loading...</p>}
+      {error && <p>Error: {error}</p>}
+      {playlist && (
+        <div>
+          <h2>{playlist.title}</h2>
+          <p>userId: {playlist.user_id}</p>
+        </div>
+      )}
+    </div>
       </footer>
     </div>
   );
