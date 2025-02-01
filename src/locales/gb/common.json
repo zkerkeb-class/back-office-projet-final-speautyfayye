@@ -1,0 +1,91 @@
+{
+  "welcome": "Welcome",
+  "navigation": {
+    "home": "Home",
+    "login": "Login",
+    "dashboard": "Dashboard",
+    "system": "Metrics"
+  },
+  "title": {
+    "form_create_playlist": "Create Playlist Form",
+    "form_create_artist": "Create Artist Form",
+    "form_create_album": "Create Album Form"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit"
+  },
+  "routes": {
+    "playlist": "Playlists",
+    "users": "Users",
+    "album": "Albums",
+    "artist": "Artists"
+  },
+  "select": {
+    "category": "Select a category"
+  },
+  "create": {
+    "loading": "Creating...",
+    "playlist": "Create Playlist",
+    "artist": "Create Artist",
+    "album": "Create Album"
+  },
+  "tables": {
+    "key": {
+      "id": "Id",
+      "title": "Title",
+      "user_id": "User Id",
+      "picture": "Picture",
+      "name": "Name",
+      "category_id": "Music Style",
+      "bio": "Biography",
+      "action": "Action",
+      "releaseDate": "Release Date"
+    },
+    "playlists": {
+      "title": "Playlists Table",
+      "create": "Create a Playlist",
+      "edit": "Edit a Playlist",
+      "delete": "Delete a Playlist",
+      "unavailable": "No playlists available"
+    },
+    "users": {
+      "title": "Users Table",
+      "create": "Create a User",
+      "edit": "Edit a User",
+      "delete": "Delete a User"
+    },
+    "tracks": {
+      "title": "Tracks Table",
+      "create": "Create a Track",
+      "edit": "Edit a Track",
+      "delete": "Delete a Track"
+    },
+    "albums": {
+      "title": "Albums Table",
+      "create": "Create an Album",
+      "edit": "Edit an Album",
+      "delete": "Delete an Album",
+      "noImage": "No image available"
+    },
+    "artists": {
+      "title": "Artists Table",
+      "create": "Create an Artist",
+      "edit": "Edit an Artist",
+      "delete": "Delete an Artist"
+    },
+    "categories": {
+      "title": "Categories Table",
+      "create": "Create a Category",
+      "edit": "Edit a Category",
+      "delete": "Delete a Category"
+    }
+  },
+  "messages": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Operation successful"
+  }
+}

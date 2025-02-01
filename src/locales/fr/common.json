@@ -1,0 +1,91 @@
+{
+  "welcome": "Bienvenue",
+  "navigation": {
+    "home": "Accueil",
+    "login": "Connexion",
+    "dashboard": "Tableau de bord",
+    "system": "Métriques"
+  },
+  "title": {
+    "form_create_playlist": "Formulaire de création de playlist",
+    "form_create_artist": "Formulaire de création d'artiste",
+    "form_create_album": "Formulaire de création d'album"
+  },
+  "actions": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier"
+  },
+  "routes": {
+    "playlist": "Playlists",
+    "users": "Utilisateurs",
+    "album": "Albums",
+    "artist": "Artistes"
+  },
+  "select": {
+    "category": "Sélectionner une catégorie"
+  },
+  "create": {
+    "loading": "Création en cours...",
+    "playlist": "Créer la playlist",
+    "artist": "Créer l'artiste",
+    "album": "Créer l'album"
+  },
+  "tables": {
+    "key": {
+      "id": "Id",
+      "title": "Titre",
+      "user_id": "Id utilisateur",
+      "picture": "Photo",
+      "name": "Nom",
+      "category_id": "Style musicale",
+      "bio": "Biographie",
+      "action": "Action",
+      "releaseDate": "Date de sortie"
+    },
+    "playlists": {
+      "title": "Tableau des playlists",
+      "create": "Créer une playlist",
+      "edit": "Modifier une playlist",
+      "delete": "Supprimer une playlist",
+      "unavailable": "Aucune playlists de disponible"
+    },
+    "users": {
+      "title": "Tableau des utilisateurs",
+      "create": "Créer un utilisateur",
+      "edit": "Modifier un utilisateur",
+      "delete": "Supprimer un utilisateur"
+    },
+    "tracks": {
+      "title": "Tableau des pistes",
+      "create": "Créer une piste",
+      "edit": "Modifier une piste",
+      "delete": "Supprimer une piste"
+    },
+    "albums": {
+      "title": "Tableau des albums",
+      "create": "Créer un album",
+      "edit": "Modifier un album",
+      "delete": "Supprimer un album",
+      "noImage": "Aucune image disponible"
+    },
+    "artists": {
+      "title": "Tableau des artistes",
+      "create": "Créer un artiste",
+      "edit": "Modifier un artiste",
+      "delete": "Supprimer un artiste"
+    },
+    "categories": {
+      "title": "Tableau des catégories",
+      "create": "Créer une catégorie",
+      "edit": "Modifier une catégorie",
+      "delete": "Supprimer une catégorie"
+    }
+  },
+  "messages": {
+    "loading": "Chargement en cours...",
+    "error": "Une erreur est survenue",
+    "success": "Opération réussie"
+  }
+}
