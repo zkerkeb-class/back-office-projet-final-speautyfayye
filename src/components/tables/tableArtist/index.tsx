@@ -2,8 +2,9 @@
 
 import StreamImage from '@/components/streamImage';
 import { AppDispatch, RootState } from '@/store'; // Assurez-vous que AppDispatch est correctement configuré
-import { deleteArtist } from '@/store/slices/artistSlice';
+import { Artist, deleteArtist } from '@/store/slices/artistSlice';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ErrorComponent from '../../error';
 import Text from '../../textLocale';
@@ -16,12 +17,12 @@ const TableArtist = ({ locale }: TArtistProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { artists, loading, error } = useSelector((state: RootState) => state.selectedArtist);
   const { categories } = useSelector((state: RootState) => state.selectedCategory);
+  const [sortedArtists, setSortedArtists] = useState<Artist[]>(artists || []);
 
-  // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
-  //   const files = event.target.files;
-  //   if (!files?.length) return;
-  //   upload(EEntityTypeId.artist, id, files);
-  // };
+  useEffect(() => {
+    if (!artists) return;
+    setSortedArtists([...artists].sort((a, b) => a.id - b.id));
+  }, [artists]);
 
   return (
     <div>
@@ -38,16 +39,16 @@ const TableArtist = ({ locale }: TArtistProps) => {
         </div>
       )}
       {error && <ErrorComponent message={error} />}
-      {artists && (
+      {sortedArtists && (
         <div>
           <div className="relative overflow-x-auto">
             <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
               <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                  {artists.length > 0 &&
-                    Object.keys(artists[0]).map((key) => (
-                      <th key={key} className="px-6 py-3">
-                        <Text locale={locale} text={`tables.key.${key}`} />
+                  {sortedArtists.length > 0 &&
+                    Object.keys(sortedArtists[0]).map((colKey) => (
+                      <th key={colKey} className="px-6 py-3">
+                        <Text locale={locale} text={`tables.key.${colKey}`} />
                       </th>
                     ))}
                   <th className="px-6 py-3">
@@ -56,8 +57,8 @@ const TableArtist = ({ locale }: TArtistProps) => {
                 </tr>
               </thead>
               <tbody>
-                {Array.isArray(artists) && artists.length > 0
-                  ? artists.map((row, index) => (
+                {Array.isArray(sortedArtists) && sortedArtists.length > 0
+                  ? sortedArtists.map((row, index) => (
                       <tr
                         key={index}
                         className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -96,7 +97,7 @@ const TableArtist = ({ locale }: TArtistProps) => {
                         </td>
                       </tr>
                     ))
-                  : artists.length == 0 && (
+                  : sortedArtists.length == 0 && (
                       <tr>
                         <td colSpan={6}>
                           <Text locale={locale} text="tables.artists.unavailable" />

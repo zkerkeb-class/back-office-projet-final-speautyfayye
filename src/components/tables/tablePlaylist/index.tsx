@@ -1,8 +1,9 @@
 'use client';
 
 import { AppDispatch, RootState } from '@/store'; // Assurez-vous que AppDispatch est correctement configuré
-import { deletePlaylist } from '@/store/slices/playlistSlice';
+import { deletePlaylist, Playlist } from '@/store/slices/playlistSlice';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ErrorComponent from '../../error';
 import Text from '../../textLocale';
@@ -14,6 +15,12 @@ interface TPlaylistProps {
 const TablePlaylist = ({ locale }: TPlaylistProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { playlists, loading, error } = useSelector((state: RootState) => state.selectedPlaylist);
+  const [sortedPlaylists, setSortedPlaylists] = useState<Playlist[]>(playlists || []);
+
+  useEffect(() => {
+    if (!playlists) return;
+    setSortedPlaylists([...playlists].sort((a, b) => a.id - b.id));
+  }, [playlists]);
 
   return (
     <div>
@@ -30,13 +37,13 @@ const TablePlaylist = ({ locale }: TPlaylistProps) => {
         </div>
       )}
       {error && <ErrorComponent message={error} />}
-      {playlists && (
+      {sortedPlaylists && (
         <div className="relative overflow-x-auto">
           <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
             <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                {playlists.length > 0 &&
-                  Object.keys(playlists[0]).map((key) => (
+                {sortedPlaylists.length > 0 &&
+                  Object.keys(sortedPlaylists[0]).map((key) => (
                     <th key={key} className="px-6 py-3">
                       <Text locale={locale} text={`tables.key.${key}`} />
                     </th>
@@ -47,8 +54,8 @@ const TablePlaylist = ({ locale }: TPlaylistProps) => {
               </tr>
             </thead>
             <tbody>
-              {Array.isArray(playlists) && playlists.length > 0
-                ? playlists.map((row, index) => (
+              {Array.isArray(sortedPlaylists) && sortedPlaylists.length > 0
+                ? sortedPlaylists.map((row, index) => (
                     <tr
                       key={index}
                       className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -69,7 +76,7 @@ const TablePlaylist = ({ locale }: TPlaylistProps) => {
                       </td>
                     </tr>
                   ))
-                : playlists.length == 0 && (
+                : sortedPlaylists.length == 0 && (
                     <tr>
                       <td colSpan={4}>
                         <Text locale={locale} text="tables.playlists.unavailable" />

@@ -85,9 +85,12 @@ export const deleteAlbum = createAsyncThunk(
   'selectedAlbum/deleteAlbum',
   async (albumId: number, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.ALBUM}`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.ALBUM}${albumId}`,
+        {
+          method: 'DELETE',
+        },
+      );
       if (!response.ok) {
         throw new Error('Failed to delete album');
       }
