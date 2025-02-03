@@ -24,7 +24,7 @@ interface SelectedTrackState {
 const initialState: SelectedTrackState = {
   track: null,
   tracks: null,
-  loading: true,
+  loading: false,
   error: null,
 };
 

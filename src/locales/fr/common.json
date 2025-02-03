@@ -34,7 +34,8 @@
     "loading": "Création en cours...",
     "playlist": "Créer la playlist",
     "artist": "Créer l'artiste",
-    "album": "Créer l'album"
+    "album": "Créer l'album",
+    "track": "Créer la musique"
   },
   "update": {
     "loading": "Mise à jour en cours...",
