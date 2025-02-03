@@ -2,6 +2,17 @@
 
 import ErrorComponent from '@/components/error';
 import Text from '@/components/textLocale';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import useTranslation from '@/customHook/useTranslation';
 import { AppDispatch, RootState } from '@/store';
 import { Artist, fetchArtist, updateArtist } from '@/store/slices/artistSlice';
@@ -71,65 +82,76 @@ const UpdateArtistForm = ({ id, locale }: UpdateArtistFormProps) => {
     router.push(`/${locale}/dashboard?tab=artists`);
   };
 
-  const handleDrop = (event: React.DragEvent<HTMLDivElement>, id: number) => {
-    event.preventDefault();
-    event.stopPropagation();
-    const files = event.dataTransfer.files;
-    uploadImage(EEntityTypeId.artist, id, files);
-  };
-
   return (
-    <div>
-      {loading && (
-        <div>
+    <Card className="mx-auto mt-4 w-[400px]">
+      <CardHeader>
+        <h2 className="text-center text-2xl font-bold">
+          <Text locale={locale} text="title.form_update.artist" />
+        </h2>
+      </CardHeader>
+      {loading ? (
+        <CardContent className="text-center">
           <Text locale={locale} text="update.loading" />
-        </div>
+        </CardContent>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">
+                <Text locale={locale} text="tables.key.name" />
+              </Label>
+              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="categoryId">
+                <Text locale={locale} text="tables.key.category_id" />
+              </Label>
+              <Select
+                value={categoryId?.toString()}
+                onValueChange={(value) => setCategoryId(Number(value))}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder={t('select.category')} />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories?.map((category) => (
+                    <SelectItem key={category.id} value={category.id.toString()}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="bio">
+                <Text locale={locale} text="tables.key.bio" />
+              </Label>
+              <Input id="bio" value={bio} onChange={(e) => setBio(e.target.value)} required />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="picture">
+                <Text locale={locale} text="tables.key.picture" />
+              </Label>
+              <Input
+                id="picture"
+                type="file"
+                onChange={(e) => handleFileChange(e, Number(id))}
+              />
+            </div>
+          </CardContent>
+
+          <CardFooter>
+            <Button type="submit" disabled={loading} className="w-full">
+              <Text locale={locale} text="update.artist" />
+            </Button>
+          </CardFooter>
+        </form>
       )}
-      {error && <ErrorComponent message={error} locale={locale} />}
-      <form onSubmit={handleSubmit}>
-        <div className="flex">
-          <Text locale={locale} text="tables.key.name" /> :
-          <input type="text" id="title" value={name} onChange={(e) => setName(e.target.value)} />
-        </div>
-        <div className="flex">
-          <Text locale={locale} text="tables.key.category_id" />:
-          <select
-            id="categoryId"
-            value={categoryId ?? ''}
-            onChange={(e) => setCategoryId(Number(e.target.value))}
-            required
-          >
-            <option value="" disabled>
-              {t('select.category')}
-            </option>
-            {categories &&
-              categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-          </select>
-        </div>
-        <div className="flex">
-          <Text locale={locale} text="tables.key.bio" />:
-          <textarea id="bio" value={bio} onChange={(e) => setBio(e.target.value)} required />
-        </div>
-        <div className="flex">
-          <Text locale={locale} text="tables.key.picture" />:
-          <div
-            onDrop={(e) => handleDrop(e, Number(id))}
-            onDragOver={(e) => e.preventDefault()}
-            className="relative flex min-h-20 w-full items-center justify-center rounded-lg border-2 border-dashed border-slate-200 bg-white hover:bg-slate-200"
-          >
-            <p className="text-center text-base">Drag & drop</p>
-          </div>
-          <input type="file" onChange={(e) => handleFileChange(e, Number(id))} />
-        </div>
-        <button type="submit">
-          <Text locale={locale} text="update.playlist" />
-        </button>
-      </form>
-    </div>
+      {error && <p className="mt-2 text-center text-red-500">{error}</p>}
+    </Card>
   );
 };
 
