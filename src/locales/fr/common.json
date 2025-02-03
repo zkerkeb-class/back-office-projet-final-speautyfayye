@@ -24,7 +24,8 @@
     "playlist": "Playlists",
     "users": "Utilisateurs",
     "album": "Albums",
-    "artist": "Artistes"
+    "artist": "Artistes",
+    "track": "musiques"
   },
   "select": {
     "category": "Sélectionner une catégorie"
@@ -51,7 +52,13 @@
       "category_id": "Style musicale",
       "bio": "Biographie",
       "action": "Action",
-      "releaseDate": "Date de sortie"
+      "releaseDate": "Date de sortie",
+      "duration": "Durée",
+      "audio": "Audio",
+      "album_id": "Id album",
+      "number_of_plays": "Nombre de lectures",
+      "trackNumber": "Numéro de piste",
+      "lyrics": "Paroles"
     },
     "playlists": {
       "title": "Tableau des playlists",
@@ -70,7 +77,8 @@
       "title": "Tableau des pistes",
       "create": "Créer une piste",
       "edit": "Modifier une piste",
-      "delete": "Supprimer une piste"
+      "delete": "Supprimer une piste",
+      "noImage": "Aucune image disponible"
     },
     "albums": {
       "title": "Tableau des albums",

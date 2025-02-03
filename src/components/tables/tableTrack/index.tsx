@@ -3,7 +3,6 @@
 import StreamImage from '@/components/streamImage';
 import { AppDispatch, RootState } from '@/store'; // Assurez-vous que AppDispatch est correctement configuré
 import { deleteAlbum } from '@/store/slices/albumSlice';
-import { EEntityTypeId, upload } from '@/utils/upload';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import ErrorComponent from '../../error';
@@ -13,23 +12,17 @@ interface TAlbumProps {
   locale: string;
 }
 
-const TableAlbum = ({ locale }: TAlbumProps) => {
+const TableTrack = ({ locale }: TAlbumProps) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { albums, loading, error } = useSelector((state: RootState) => state.selectedAlbum);
+  const { tracks, loading, error } = useSelector((state: RootState) => state.selectedTrack);
   const { categories } = useSelector((state: RootState) => state.selectedCategory);
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
-    const files = event.target.files;
-    if (!files?.length) return;
-    upload(EEntityTypeId.album, id, files);
-  };
 
   return (
     <div>
       <h1 className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
         <Text
           locale={locale}
-          text="tables.albums.title"
+          text="tables.tracks.title"
           style="whitespace-nowrap px-6 py-2 font-medium text-gray-900 dark:text-white"
         />
       </h1>
@@ -39,13 +32,13 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
         </div>
       )}
       {error && <ErrorComponent message={error} />}
-      {albums && (
+      {tracks && (
         <div className="relative overflow-x-auto">
           <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
             <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                {albums.length > 0 &&
-                  Object.keys(albums[0]).map((key) => (
+                {tracks.length > 0 &&
+                  Object.keys(tracks[0]).map((key) => (
                     <th key={key} className="px-6 py-3">
                       <Text locale={locale} text={`tables.key.${key}`} />
                     </th>
@@ -56,8 +49,8 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
               </tr>
             </thead>
             <tbody>
-              {Array.isArray(albums) && albums.length > 0
-                ? albums.map((row, index) => (
+              {Array.isArray(tracks) && tracks.length > 0
+                ? tracks.map((row, index) => (
                     <tr
                       key={index}
                       className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -66,26 +59,30 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
                       <td className="whitespace-nowrap px-6 py-2 font-medium text-gray-900 dark:text-white">
                         {row.title}
                       </td>
+                      <td className="px-6 py-2">{row.duration?.toString()}</td>
                       <td className="px-6 py-2">{row.releaseDate.toString()}</td>
+                      <td className="px-6 py-2">{row.trackNumber.toString()}</td>
+                      <td className="px-6 py-2">{row.number_of_plays.toString()}</td>
+                      <td className="px-6 py-2">{row.lyrics?.substring(0, 50)}</td>
+                      <td className="px-6 py-2">{row.album_id}</td>
                       <td className="px-6 py-2">
                         {(categories &&
                           categories!.find((category) => category.id === row.category_id)
                             ?.name) || <Text locale={locale} text="tables.artists.noCategory" />}
                       </td>
-                      {/* <td className="px-6 py-2">{row.picture}</td> */}
                       <td className="px-6 py-2">
                         {row.picture ? (
                           <>
                             <StreamImage size={200} imageId={row.picture} />
-                            <input type="file" onChange={(e) => handleFileChange(e, row.id)} />
                           </>
                         ) : (
                           <>
-                            <Text locale={locale} text="tables.albums.noImage" />
-                            <input type="file" onChange={(e) => handleFileChange(e, row.id)} />
+                            <Text locale={locale} text="tables.tracks.noImage" />
                           </>
                         )}
                       </td>
+                      <td className="px-6 py-2">{row.audio}</td>
+
                       <td className="flex items-center gap-2 px-6 py-2">
                         <button onClick={() => dispatch(deleteAlbum(row.id))}>
                           <Text locale={locale} text="actions.delete" />
@@ -97,16 +94,16 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
                       </td>
                     </tr>
                   ))
-                : albums.length == 0 && (
+                : tracks.length == 0 && (
                     <tr>
-                      <td colSpan={6}>
-                        <Text locale={locale} text="tables.albums.unavailable" />
+                      <td colSpan={12}>
+                        <Text locale={locale} text="tables.tracks.unavailable" />
                       </td>
                     </tr>
                   )}
               <tr>
                 <td
-                  colSpan={6}
+                  colSpan={12}
                   className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400"
                 >
                   <Link
@@ -115,7 +112,7 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
                   >
                     <Text
                       locale={locale}
-                      text="tables.albums.create"
+                      text="tables.tracks.create"
                       style="whitespace-nowrap px-6 py-2 font-medium text-gray-900 dark:text-white"
                     />
                   </Link>
@@ -130,4 +127,4 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
   );
 };
 
-export default TableAlbum;
+export default TableTrack;

@@ -20,7 +20,7 @@ const Page: FC<PageProps> = async (props) => {
         <TablePicker
           locale={locale}
           tab={
-            ['playlists', 'artists', 'albums'].includes(searchParams.tab as string)
+            ['playlists', 'artists', 'albums', 'tracks'].includes(searchParams.tab as string)
               ? (searchParams.tab as 'playlists' | 'artists' | 'albums')
               : undefined
           }

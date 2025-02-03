@@ -3,6 +3,7 @@ import selectedAlbumReducer from './slices/albumSlice';
 import selectedArtistReducer from './slices/artistSlice';
 import selectedCategoryReducer from './slices/categorySlice';
 import selectedPlaylistReducer from './slices/playlistSlice';
+import selectedTrackReducer from './slices/trackSlice';
 import selectedUserReducer from './slices/userSlice';
 
 export const store = configureStore({
@@ -12,6 +13,7 @@ export const store = configureStore({
     selectedUser: selectedUserReducer,
     selectedAlbum: selectedAlbumReducer,
     selectedCategory: selectedCategoryReducer,
+    selectedTrack: selectedTrackReducer,
   },
 });
 
