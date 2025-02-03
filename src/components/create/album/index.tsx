@@ -9,6 +9,17 @@ import { fetchAllCategories } from '@/store/slices/categorySlice';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface CreateAlbumFormProps {
   locale: string;
@@ -24,7 +35,6 @@ const CreateAlbumForm = ({ locale }: CreateAlbumFormProps) => {
   const [title, setTitle] = useState('');
   const [releaseDate, setReleaseDate] = useState('');
   const [categoryId, setCategoryId] = useState<number | null>(null);
-  const [picture, setPicture] = useState<string | undefined>(undefined);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,8 +43,7 @@ const CreateAlbumForm = ({ locale }: CreateAlbumFormProps) => {
         createAlbum({
           title,
           releaseDate: new Date(releaseDate),
-          category_id: categoryId,
-          picture,
+          category_id: categoryId
         }),
       )
         .unwrap()
@@ -53,66 +62,86 @@ const CreateAlbumForm = ({ locale }: CreateAlbumFormProps) => {
   }, []);
 
   return (
-    <div>
+    <Card className="w-[400px] mx-auto mt-10">
+      <CardHeader>
+        <h2 className="text-2xl font-bold text-center">
+          <Text locale={locale} text="title.form_create_album" />
+        </h2>
+      </CardHeader>
       <form onSubmit={handleSubmit}>
-        <div className="flex">
-          <Text locale={locale} text="tables.key.title" />:
-          <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-        </div>
-        <div className="flex">
-          <Text locale={locale} text="tables.key.releaseDate" />:
-          <input
-            type="date"
-            id="releaseDate"
-            value={releaseDate}
-            onChange={(e) => setReleaseDate(e.target.value)}
-            required
-          />
-        </div>
-        <div className="flex">
-          <Text locale={locale} text="tables.key.category_id" />:
-          <select
-            id="categoryId"
-            value={categoryId ?? ''}
-            onChange={(e) => setCategoryId(Number(e.target.value))}
-            required
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="title">
+              <Text locale={locale} text="tables.key.title" />
+            </Label>
+            <Input
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="releaseDate">
+              <Text locale={locale} text="tables.key.releaseDate" />
+            </Label>
+            <Input
+              type="date"
+              id="releaseDate"
+              value={releaseDate}
+              onChange={(e) => setReleaseDate(e.target.value)}
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="categoryId">
+              <Text locale={locale} text="tables.key.category_id" />
+            </Label>
+            <Select
+              value={categoryId?.toString()}
+              onValueChange={(value) => setCategoryId(Number(value))}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={t('select.category')} />
+              </SelectTrigger>
+              <SelectContent>
+                {categories?.map((category) => (
+                  <SelectItem key={category.id} value={category.id.toString()}>
+                    {category.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* <div className="space-y-2">
+            <Label htmlFor="picture">
+              <Text locale={locale} text="tables.key.picture" />
+            </Label>
+            <Input
+              id="picture"
+              value={picture}
+              onChange={(e) => setPicture(e.target.value)}
+            />
+          </div> */}
+        </CardContent>
+        <CardFooter>
+          <Button 
+            type="submit" 
+            disabled={loading}
+            className="w-full"
           >
-            <option value="" disabled>
-              {t('select.category')}
-            </option>
-            {categories &&
-              categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-          </select>
-        </div>
-        <div className="flex">
-          <Text locale={locale} text="tables.key.picture" />:
-          <input
-            type="text"
-            id="picture"
-            value={picture}
-            onChange={(e) => setPicture(e.target.value)}
-          />
-        </div>
-        <button type="submit" disabled={loading}>
-          {loading ? (
-            <Text locale={locale} text="create.loading" />
-          ) : (
-            <Text locale={locale} text="create.album" />
-          )}
-        </button>
+            {loading ? (
+              <Text locale={locale} text="create.loading" />
+            ) : (
+              <Text locale={locale} text="create.album" />
+
+            )}
+          </Button>
+        </CardFooter>
       </form>
       {error && <ErrorComponent message={error} />}
-    </div>
+    </Card>
   );
 };
 

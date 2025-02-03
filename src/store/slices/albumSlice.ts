@@ -6,7 +6,7 @@ export interface Album {
   title: string;
   releaseDate: Date;
   category_id: number;
-  picture: string | undefined;
+  picture?: string | undefined;
   artist?: any;
   tracks?: any;
 }
@@ -21,7 +21,7 @@ interface SelectedAlbumState {
 const initialState: SelectedAlbumState = {
   album: null,
   albums: null,
-  loading: true,
+  loading: false,
   error: null,
 };
 
