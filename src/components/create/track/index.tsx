@@ -8,6 +8,17 @@ import { uploadAudio } from '@/utils/upload';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface Props {
   locale: string;
@@ -20,6 +31,7 @@ const TrackForm = ({ locale }: Props) => {
   const { categories } = useSelector((state: RootState) => state.selectedCategory);
   const [id, setId] = useState<string | null>(null);
   const [duration, setDuration] = useState<number | null>(null);
+  const { loading, error } = useSelector((state: RootState) => state.selectedTrack);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,50 +61,111 @@ const TrackForm = ({ locale }: Props) => {
 
     audio.onloadedmetadata = () => {
       setDuration(audio.duration);
-      URL.revokeObjectURL(objectURL); // Nettoyer l'URL temporaire
+      URL.revokeObjectURL(objectURL);
     };
   };
 
   useEffect(() => {
     dispatch(fetchAllCategories());
-  }, []);
+  }, [dispatch]);
 
   return (
-    <div>
-      <form onSubmit={(e) => handleSubmit(e)}>
-        <input type="file" onChange={(e) => handleFileChange(e)} accept=".mp3" required />
-        <div className="flex">
-          <h1>Titre</h1>
-          <input type="text" name="title" required />
-        </div>
-        <div className="flex">
-          <Text locale={locale} text="tables.key.releaseDate" />:
-          <input type="date" name="releaseDate" required />
-        </div>
-        <div className="flex">
-          <Text locale={locale} text="tables.key.category_id" />:
-          <select name="category_id" required>
-            <option disabled>{t('select.category')}</option>
-            {categories &&
-              categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-          </select>
-        </div>
-        <div className="flex">
-          <h1>Album ID</h1>
-          <input type="number" name="album_id" />
-        </div>
-        <div className="flex">
-          <h1>Lyrics</h1>
-          <textarea name="lyrics" />
-        </div>
-        <input type="hidden" name="audio" value="1ff1fc8e-81d1-4c67-8109-7313587382c5" />
-        <button type="submit">Créer</button>
-      </form>
-    </div>
+    <Card className="w-[400px] mx-auto mt-10">
+      <CardHeader>
+        <h2 className="text-2xl font-bold text-center">
+          <Text locale={locale} text="title.form_create_track" />
+        </h2>
+      </CardHeader>
+      <form onSubmit={handleSubmit}>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="audio">Audio</Label>
+            <Input
+              id="audio"
+              type="file"
+              onChange={handleFileChange}
+              accept=".mp3"
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="title">
+              <Text locale={locale} text="tables.key.title" />
+            </Label>
+            <Input
+              id="title"
+              name="title"
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="releaseDate">
+              <Text locale={locale} text="tables.key.releaseDate" />
+            </Label>
+            <Input
+              type="date"
+              id="releaseDate"
+              name="releaseDate"
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="category_id">
+              <Text locale={locale} text="tables.key.category_id" />
+            </Label>
+            <Select name="category_id">
+              <SelectTrigger>
+                <SelectValue placeholder={t('select.category')} />
+              </SelectTrigger>
+              <SelectContent>
+                {categories?.map((category) => (
+                  <SelectItem key={category.id} value={category.id.toString()}>
+                    {category.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="album_id">Album ID</Label>
+            <Input
+              type="number"
+              id="album_id"
+              name="album_id"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="lyrics">Lyrics</Label>
+            <Input
+              id="lyrics"
+              name="lyrics"
+            />
+          </div>
+
+          <input type="hidden" name="audio" value={id || ''} />
+        </CardContent>
+
+        <CardFooter>
+          <Button 
+            type="submit"
+            disabled={loading}
+            className="w-full"
+          >
+            {loading ? (
+              <Text locale={locale} text="create.loading" />
+            ) : (
+              <Text locale={locale} text="create.track" />
+            )}
+          </Button>
+        </CardFooter>
+      </form> 
+      {error && <p className="text-red-500 text-center mt-2">{error}</p>}
+    </Card>
   );
 };
 

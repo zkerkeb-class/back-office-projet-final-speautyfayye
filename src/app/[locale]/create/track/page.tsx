@@ -13,7 +13,7 @@ const CreateAlbumPage: React.FC = async () => {
     <div>
       <Header locale={locale} />
       <h1>
-        <Text locale={locale} text="title.form_create_album" />
+        {/* <Text locale={locale} text="title.form_create_album" /> */}
       </h1>
       <TrackForm locale={locale} />
     </div>
