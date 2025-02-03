@@ -1,16 +1,16 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '@/store';
-import { fetchPlaylist, Playlist, updatePlaylist } from '@/store/slices/playlistSlice';
 import ErrorComponent from '@/components/error';
 import Text from '@/components/textLocale';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { AppDispatch, RootState } from '@/store';
+import { fetchPlaylist, Playlist, updatePlaylist } from '@/store/slices/playlistSlice';
 import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 interface UpdatePlaylistFormProps {
   id: string;
@@ -56,7 +56,7 @@ const UpdatePlaylistForm = ({ id, locale }: UpdatePlaylistFormProps) => {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-center text-2xl font-bold text-gray-900">
-            <Text locale={locale} text="update.playlist" />
+            <Text locale={locale} text="title.form_update_playlist" />
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -80,7 +80,6 @@ const UpdatePlaylistForm = ({ id, locale }: UpdatePlaylistFormProps) => {
                   onChange={(e) => setTitle(e.target.value)}
                   required
                   className="block w-full rounded-md border-gray-300 shadow-sm"
-                  placeholder="Playlist Title"
                 />
               </div>
 

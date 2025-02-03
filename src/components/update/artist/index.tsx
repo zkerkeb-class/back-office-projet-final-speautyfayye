@@ -1,6 +1,5 @@
 'use client';
 
-import ErrorComponent from '@/components/error';
 import Text from '@/components/textLocale';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
@@ -86,7 +85,7 @@ const UpdateArtistForm = ({ id, locale }: UpdateArtistFormProps) => {
     <Card className="mx-auto mt-4 w-[400px]">
       <CardHeader>
         <h2 className="text-center text-2xl font-bold">
-          <Text locale={locale} text="title.form_update.artist" />
+          <Text locale={locale} text="title.form_update_artist" />
         </h2>
       </CardHeader>
       {loading ? (
@@ -135,11 +134,7 @@ const UpdateArtistForm = ({ id, locale }: UpdateArtistFormProps) => {
               <Label htmlFor="picture">
                 <Text locale={locale} text="tables.key.picture" />
               </Label>
-              <Input
-                id="picture"
-                type="file"
-                onChange={(e) => handleFileChange(e, Number(id))}
-              />
+              <Input id="picture" type="file" onChange={(e) => handleFileChange(e, Number(id))} />
             </div>
           </CardContent>
 

@@ -1,7 +1,6 @@
 'use server';
 
 import Header from '@/components/header';
-import Text from '@/components/textLocale';
 import UpdateArtistForm from '@/components/update/artist';
 import { headers } from 'next/headers';
 
@@ -19,9 +18,9 @@ const UpdateArtistPage = async ({ params }: UpdateArtistPageProps) => {
   return (
     <div>
       <Header locale={locale} />
-      <h1>
+      {/* <h1>
         <Text locale={locale} text="title.form_update_artist" />
-      </h1>
+      </h1> */}
       <UpdateArtistForm id={id} locale={locale} />
     </div>
   );
