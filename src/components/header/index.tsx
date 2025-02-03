@@ -3,6 +3,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import LanguageDropdown from '../languageDropdown';
 import Text from '../textLocale';
 
@@ -11,7 +12,17 @@ interface HeaderProps {
 }
 
 const Header = ({ locale }: HeaderProps) => {
-  const isLogged = window && localStorage !== undefined && localStorage.getItem('token');
+  const [isLogged, setIsLogged] = useState(false);
+
+  useEffect(() => {
+    if (
+      typeof window !== 'undefined' &&
+      localStorage !== undefined &&
+      localStorage.getItem('token')
+    ) {
+      setIsLogged(true);
+    }
+  }, []);
 
   const logout = () => {
     localStorage.removeItem('token');

@@ -71,13 +71,20 @@ const UpdateArtistForm = ({ id, locale }: UpdateArtistFormProps) => {
     router.push(`/${locale}/dashboard?tab=artists`);
   };
 
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>, id: number) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const files = event.dataTransfer.files;
+    uploadImage(EEntityTypeId.artist, id, files);
+  };
+
   return (
     <div>
       {loading && (
         <div>
           <Text locale={locale} text="update.loading" />
         </div>
-      )}{' '}
+      )}
       {error && <ErrorComponent message={error} />}
       <form onSubmit={handleSubmit}>
         <div className="flex">
@@ -109,6 +116,13 @@ const UpdateArtistForm = ({ id, locale }: UpdateArtistFormProps) => {
         </div>
         <div className="flex">
           <Text locale={locale} text="tables.key.picture" />:
+          <div
+            onDrop={(e) => handleDrop(e, Number(id))}
+            onDragOver={(e) => e.preventDefault()}
+            className="relative flex min-h-20 w-full items-center justify-center rounded-lg border-2 border-dashed border-slate-200 bg-white hover:bg-slate-200"
+          >
+            <p className="text-center text-base">Drag & drop</p>
+          </div>
           <input type="file" onChange={(e) => handleFileChange(e, Number(id))} />
         </div>
         <button type="submit">
