@@ -1,4 +1,4 @@
-name: speautyfayye
+name: speautyfayye-backoffice
 services:
   back-office:
     build:
