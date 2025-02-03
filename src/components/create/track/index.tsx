@@ -32,8 +32,9 @@ const TrackForm = ({ locale }: Props) => {
       },
       body: JSON.stringify({ ...Object.fromEntries(formData), audio: id, duration }),
     });
-
-    console.log(response.status);
+    if (response.ok) {
+      router.push(`/${locale}/dashboard?tab=tracks`);
+    }
   };
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
