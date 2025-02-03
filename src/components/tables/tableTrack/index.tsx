@@ -3,6 +3,7 @@
 import StreamImage from '@/components/streamImage';
 import { AppDispatch, RootState } from '@/store'; // Assurez-vous que AppDispatch est correctement configuré
 import { deleteTrack } from '@/store/slices/trackSlice';
+import { formatDuration } from '@/utils/helpers';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import ErrorComponent from '../../error';
@@ -59,7 +60,9 @@ const TableTrack = ({ locale }: TAlbumProps) => {
                       <td className="whitespace-nowrap px-6 py-2 font-medium text-gray-900 dark:text-white">
                         {row.title}
                       </td>
-                      <td className="px-6 py-2">{row.duration && Math.floor(row.duration)}</td>
+                      <td className="px-6 py-2">
+                        {row.duration && formatDuration(row.duration.toString())}
+                      </td>
                       <td className="px-6 py-2">
                         {row.releaseDate && row.releaseDate.toString().split('T')[0]}
                       </td>
