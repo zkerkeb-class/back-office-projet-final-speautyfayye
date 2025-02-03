@@ -1,27 +1,45 @@
 {
   "welcome": "Welcome",
+  "logout": "Logout",
+  "error": "Error",
   "navigation": {
     "home": "Home",
     "login": "Login",
     "dashboard": "Dashboard",
     "system": "Metrics"
   },
+  "routes": {
+    "playlist": "Playlists",
+    "users": "Users",
+    "album": "Albums",
+    "artist": "Artists",
+    "track": "Tracks"
+  },
+  "login": {
+    "title": "Login",
+    "email": "Email Address",
+    "password": "Password",
+    "submit": "Login"
+  },
   "title": {
-    "form_create_playlist": "Create Playlist Form",
-    "form_create_artist": "Create Artist Form",
-    "form_create_album": "Create Album Form"
+    "form_create": {
+      "playlist": "Create Playlist Form",
+      "artist": "Create Artist Form",
+      "album": "Create Album Form",
+      "track": "Create Track Form"
+    },
+    "form_update": {
+      "playlist": "Update Playlist Form",
+      "artist": "Update Artist Form",
+      "album": "Update Album Form",
+      "track": "Update Track Form"
+    }
   },
   "actions": {
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
     "edit": "Edit"
-  },
-  "routes": {
-    "playlist": "Playlists",
-    "users": "Users",
-    "album": "Albums",
-    "artist": "Artists"
   },
   "select": {
     "category": "Select a category"
@@ -30,7 +48,35 @@
     "loading": "Creating...",
     "playlist": "Create Playlist",
     "artist": "Create Artist",
-    "album": "Create Album"
+    "album": "Create Album",
+    "track": "Create Track"
+  },
+  "update": {
+    "loading": "Updating...",
+    "playlist": "Update Playlist",
+    "artist": "Update Artist",
+    "album": "Update Album",
+    "track": "Update Track"
+  },
+  "messages": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Operation successful"
+  },
+  "metrics": {
+    "sysmet": "System Metrics",
+    "memory": "Memory",
+    "totalHeap": "Total Heap",
+    "usedHeap": "Used Heap",
+    "rss": "RSS",
+    "cpu": {
+      "user": "User",
+      "system": "System"
+    },
+    "uptime": {
+      "value": "Uptime",
+      "unit": "Hours"
+    }
   },
   "tables": {
     "key": {
@@ -42,7 +88,13 @@
       "category_id": "Music Style",
       "bio": "Biography",
       "action": "Action",
-      "releaseDate": "Release Date"
+      "releaseDate": "Release Date",
+      "duration": "Duration",
+      "audio": "Audio",
+      "album_id": "Album Id",
+      "number_of_plays": "Number of Plays",
+      "trackNumber": "Track Number",
+      "lyrics": "Lyrics"
     },
     "playlists": {
       "title": "Playlists Table",
@@ -61,7 +113,8 @@
       "title": "Tracks Table",
       "create": "Create a Track",
       "edit": "Edit a Track",
-      "delete": "Delete a Track"
+      "delete": "Delete a Track",
+      "noImage": "No image available"
     },
     "albums": {
       "title": "Albums Table",
@@ -74,7 +127,8 @@
       "title": "Artists Table",
       "create": "Create an Artist",
       "edit": "Edit an Artist",
-      "delete": "Delete an Artist"
+      "delete": "Delete an Artist",
+      "noCategory": "No category found"
     },
     "categories": {
       "title": "Categories Table",
@@ -82,10 +136,5 @@
       "edit": "Edit a Category",
       "delete": "Delete a Category"
     }
-  },
-  "messages": {
-    "loading": "Loading...",
-    "error": "An error occurred",
-    "success": "Operation successful"
   }
 }
