@@ -18,9 +18,9 @@ const UpdateTrackPage = async ({ params }: UpdateTrackPageProps) => {
   return (
     <div>
       <Header locale={locale} />
-      <h1>
+      {/* <h1>
         <Text locale={locale} text="title.form_update_track" />
-      </h1>
+      </h1> */}
       <UpdateTrackForm id={id} locale={locale} />
     </div>
   );
