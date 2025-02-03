@@ -23,7 +23,7 @@ interface SelectedArtistState {
 const initialState: SelectedArtistState = {
   artist: null,
   artists: null,
-  loading: true,
+  loading: false,
   error: null,
 };
 

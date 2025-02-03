@@ -13,7 +13,7 @@ const CreateArtistPage: React.FC = async () => {
     <div>
       <Header locale={locale} />
       <h1>
-        <Text locale={locale} text="title.form_create_artist" />
+        {/* <Text locale={locale} text="title.form_create_artist" /> */}
       </h1>
       <CreateArtistForm locale={locale} />
     </div>
