@@ -2,6 +2,7 @@
 
 import ErrorComponent from '@/components/error';
 import Text from '@/components/textLocale';
+import useTranslation from '@/customHook/useTranslation';
 import { AppDispatch, RootState } from '@/store';
 import { createAlbum } from '@/store/slices/albumSlice';
 import { fetchAllCategories } from '@/store/slices/categorySlice';
@@ -14,6 +15,7 @@ interface CreateAlbumFormProps {
 }
 
 const CreateAlbumForm = ({ locale }: CreateAlbumFormProps) => {
+  const { t } = useTranslation(locale);
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { loading, error } = useSelector((state: RootState) => state.selectedAlbum);
@@ -82,7 +84,7 @@ const CreateAlbumForm = ({ locale }: CreateAlbumFormProps) => {
             required
           >
             <option value="" disabled>
-              <Text locale={locale} text="select.category" />
+              {t('select.category')}
             </option>
             {categories &&
               categories.map((category) => (

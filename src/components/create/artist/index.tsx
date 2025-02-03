@@ -1,6 +1,7 @@
 'use client';
 
 import Text from '@/components/textLocale';
+import useTranslation from '@/customHook/useTranslation';
 import { AppDispatch, RootState } from '@/store';
 import { createArtist } from '@/store/slices/artistSlice';
 import { fetchAllCategories } from '@/store/slices/categorySlice';
@@ -13,6 +14,7 @@ interface CreateArtistFormProps {
 }
 
 const CreateArtistForm = ({ locale }: CreateArtistFormProps) => {
+  const { t } = useTranslation(locale);
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   //   const { loading, error } = useSelector((state: RootState) => state.selectedArtist);
@@ -65,7 +67,7 @@ const CreateArtistForm = ({ locale }: CreateArtistFormProps) => {
             required
           >
             <option value="" disabled>
-              <Text locale={locale} text="select.category" />
+              {t('select.category')}
             </option>
             {categories &&
               categories.map((category) => (

@@ -3,7 +3,6 @@
 import StreamImage from '@/components/streamImage';
 import { AppDispatch, RootState } from '@/store'; // Assurez-vous que AppDispatch est correctement configuré
 import { deleteArtist } from '@/store/slices/artistSlice';
-import { EEntityTypeId, upload } from '@/utils/upload';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import ErrorComponent from '../../error';
@@ -18,11 +17,11 @@ const TableArtist = ({ locale }: TArtistProps) => {
   const { artists, loading, error } = useSelector((state: RootState) => state.selectedArtist);
   const { categories } = useSelector((state: RootState) => state.selectedCategory);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
-    const files = event.target.files;
-    if (!files?.length) return;
-    upload(EEntityTypeId.artist, id, files);
-  };
+  // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
+  //   const files = event.target.files;
+  //   if (!files?.length) return;
+  //   upload(EEntityTypeId.artist, id, files);
+  // };
 
   return (
     <div>
@@ -77,12 +76,12 @@ const TableArtist = ({ locale }: TArtistProps) => {
                           {row.picture ? (
                             <>
                               <StreamImage size={200} imageId={row.picture} />
-                              <input type="file" onChange={(e) => handleFileChange(e, row.id)} />
+                              {/* <input type="file" onChange={(e) => handleFileChange(e, row.id)} /> */}
                             </>
                           ) : (
                             <>
                               <Text locale={locale} text="tables.albums.noImage" />
-                              <input type="file" onChange={(e) => handleFileChange(e, row.id)} />
+                              {/* <input type="file" onChange={(e) => handleFileChange(e, row.id)} /> */}
                             </>
                           )}
                         </td>

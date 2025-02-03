@@ -3,7 +3,6 @@
 import StreamImage from '@/components/streamImage';
 import { AppDispatch, RootState } from '@/store'; // Assurez-vous que AppDispatch est correctement configuré
 import { deleteAlbum } from '@/store/slices/albumSlice';
-import { EEntityTypeId, upload } from '@/utils/upload';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import ErrorComponent from '../../error';
@@ -17,12 +16,6 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { albums, loading, error } = useSelector((state: RootState) => state.selectedAlbum);
   const { categories } = useSelector((state: RootState) => state.selectedCategory);
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
-    const files = event.target.files;
-    if (!files?.length) return;
-    upload(EEntityTypeId.album, id, files);
-  };
 
   return (
     <div>
@@ -72,17 +65,14 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
                           categories!.find((category) => category.id === row.category_id)
                             ?.name) || <Text locale={locale} text="tables.artists.noCategory" />}
                       </td>
-                      {/* <td className="px-6 py-2">{row.picture}</td> */}
                       <td className="px-6 py-2">
                         {row.picture ? (
                           <>
                             <StreamImage size={200} imageId={row.picture} />
-                            <input type="file" onChange={(e) => handleFileChange(e, row.id)} />
                           </>
                         ) : (
                           <>
                             <Text locale={locale} text="tables.albums.noImage" />
-                            <input type="file" onChange={(e) => handleFileChange(e, row.id)} />
                           </>
                         )}
                       </td>

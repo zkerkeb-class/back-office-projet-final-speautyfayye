@@ -2,9 +2,11 @@
 
 import ErrorComponent from '@/components/error';
 import Text from '@/components/textLocale';
+import useTranslation from '@/customHook/useTranslation';
 import { AppDispatch, RootState } from '@/store';
 import { Artist, fetchArtist, updateArtist } from '@/store/slices/artistSlice';
 import { fetchAllCategories } from '@/store/slices/categorySlice';
+import { EEntityTypeId, upload } from '@/utils/upload';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +17,7 @@ interface UpdateArtistFormProps {
 }
 
 const UpdateArtistForm = ({ id, locale }: UpdateArtistFormProps) => {
+  const { t } = useTranslation(locale);
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const { artist, loading, error } = useSelector((state: RootState) => state.selectedArtist);
@@ -48,13 +51,10 @@ const UpdateArtistForm = ({ id, locale }: UpdateArtistFormProps) => {
         ...artist,
         name,
         bio,
-        picture,
         category_id: categoryId,
       };
-      // const { artist: artisted, tracks, ...rest } = updatedArtist;
-      const { tracks, ...rest } = updatedArtist;
+      const { tracks, albums, category, ...rest } = updatedArtist;
       updatedArtist = rest;
-      console.log(updatedArtist);
 
       dispatch(updateArtist(updatedArtist))
         .unwrap()
@@ -62,6 +62,13 @@ const UpdateArtistForm = ({ id, locale }: UpdateArtistFormProps) => {
           router.push(`/${locale}/dashboard?tab=artists`);
         });
     }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
+    const files = event.target.files;
+    if (!files?.length) return;
+    upload(EEntityTypeId.artist, id, files);
+    router.push(`/${locale}/dashboard?tab=artists`);
   };
 
   return (
@@ -86,7 +93,7 @@ const UpdateArtistForm = ({ id, locale }: UpdateArtistFormProps) => {
             required
           >
             <option value="" disabled>
-              <Text locale={locale} text="select.category" />
+              {t('select.category')}
             </option>
             {categories &&
               categories.map((category) => (
@@ -102,12 +109,7 @@ const UpdateArtistForm = ({ id, locale }: UpdateArtistFormProps) => {
         </div>
         <div className="flex">
           <Text locale={locale} text="tables.key.picture" />:
-          <input
-            type="text"
-            id="picture"
-            value={picture}
-            onChange={(e) => setPicture(e.target.value)}
-          />
+          <input type="file" onChange={(e) => handleFileChange(e, Number(id))} />
         </div>
         <button type="submit">
           <Text locale={locale} text="update.playlist" />

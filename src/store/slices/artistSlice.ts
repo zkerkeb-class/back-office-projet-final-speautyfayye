@@ -8,6 +8,8 @@ export interface Artist {
   bio: string;
   picture: string | undefined;
   tracks?: any;
+  albums?: any;
+  category?: any;
 }
 
 interface SelectedArtistState {

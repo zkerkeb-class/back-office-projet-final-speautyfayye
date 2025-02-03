@@ -6,6 +6,7 @@ import useTranslation from '@/customHook/useTranslation';
 import { AppDispatch, RootState } from '@/store';
 import { Album, fetchAlbum, updateAlbum } from '@/store/slices/albumSlice';
 import { fetchAllCategories } from '@/store/slices/categorySlice';
+import { EEntityTypeId, upload } from '@/utils/upload';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -58,6 +59,13 @@ const UpdateAlbumForm = ({ id, locale }: UpdateAlbumFormProps) => {
     }
   };
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
+    const files = event.target.files;
+    if (!files?.length) return;
+    upload(EEntityTypeId.artist, id, files);
+    router.push(`/${locale}/dashboard?tab=albums`);
+  };
+
   return (
     <div>
       {loading && (
@@ -95,8 +103,8 @@ const UpdateAlbumForm = ({ id, locale }: UpdateAlbumFormProps) => {
           </select>
         </div>
         <div className="flex">
-          <Text locale={locale} text="tables.key.picture" />
-          <input type="file" />
+          <Text locale={locale} text="tables.key.picture" />:
+          <input type="file" onChange={(e) => handleFileChange(e, Number(id))} />
         </div>
         <button type="submit">
           <Text locale={locale} text="update.album" />
