@@ -5,6 +5,7 @@ import { fetchAllAlbums } from '@/store/slices/albumSlice';
 import { fetchAllArtists } from '@/store/slices/artistSlice';
 import { fetchAllCategories } from '@/store/slices/categorySlice';
 import { fetchAllPlaylists } from '@/store/slices/playlistSlice';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import TableAlbum from '../tables/tableAlbum';
@@ -18,7 +19,14 @@ interface TablePickerProps {
 }
 
 const TablePicker: React.FC<TablePickerProps> = ({ locale, tab = 'playlists' }) => {
-  console.log('🚀 ~ tab:', tab);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!localStorage.getItem('token')) {
+      router.push(`/${locale}/login`);
+    }
+  }, []);
+
   const [view, setView] = useState<'playlists' | 'artists' | 'albums'>(tab);
   const dispatch = useDispatch<AppDispatch>();
 

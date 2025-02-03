@@ -36,13 +36,13 @@ interface RequestMetrics {
 const API_BASE_URL = process.env.NEXT_PUBLIC_URL_API;
 
 export const fetchSystemMetrics = async (): Promise<SystemMetrics> => {
-  const response = await fetch(`${API_BASE_URL}/metrics`);
+  const response = await fetch(`${API_BASE_URL}metrics`);
   const data = await response.json();
   return data.data;
 };
 
 export const fetchRequestMetrics = async (): Promise<RequestMetrics> => {
-  const response = await fetch(`${API_BASE_URL}/metrics/requests`);
+  const response = await fetch(`${API_BASE_URL}metrics/requests`);
   const data = await response.json();
   return data.data;
 };
@@ -67,4 +67,4 @@ export const fetchAllMetrics = async (): Promise<{
   }
 };
 
-export type { SystemMetrics, RequestMetrics };
+export type { RequestMetrics, SystemMetrics };
