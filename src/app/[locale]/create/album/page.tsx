@@ -2,7 +2,6 @@
 
 import CreateAlbumForm from '@/components/create/album';
 import Header from '@/components/header';
-import Text from '@/components/textLocale';
 import { headers } from 'next/headers';
 import React from 'react';
 

@@ -1,12 +1,26 @@
 {
   "welcome": "Welcome",
-  "logout": "Logout",
-  "error": "Error",
   "navigation": {
     "home": "Home",
     "login": "Login",
     "dashboard": "Dashboard",
     "system": "Metrics"
+  },
+  "title": {
+    "form_create_playlist": "Create Playlist Form",
+    "form_create_artist": "Create Artist Form",
+    "form_create_album": "Create Album Form",
+    "form_create_track": "Create Track Form",
+    "form_update_playlist": "Update Playlist Form",
+    "form_update_artist": "Update Artist Form",
+    "form_update_album": "Update Album Form",
+    "form_update_track": "Update Track Form"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit"
   },
   "routes": {
     "playlist": "Playlists",
@@ -14,32 +28,6 @@
     "album": "Albums",
     "artist": "Artists",
     "track": "Tracks"
-  },
-  "login": {
-    "title": "Login",
-    "email": "Email Address",
-    "password": "Password",
-    "submit": "Login"
-  },
-  "title": {
-    "form_create": {
-      "playlist": "Create Playlist Form",
-      "artist": "Create Artist Form",
-      "album": "Create Album Form",
-      "track": "Create Track Form"
-    },
-    "form_update": {
-      "playlist": "Update Playlist Form",
-      "artist": "Update Artist Form",
-      "album": "Update Album Form",
-      "track": "Update Track Form"
-    }
-  },
-  "actions": {
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit"
   },
   "select": {
     "category": "Select a category"
@@ -57,26 +45,6 @@
     "artist": "Update Artist",
     "album": "Update Album",
     "track": "Update Track"
-  },
-  "messages": {
-    "loading": "Loading...",
-    "error": "An error occurred",
-    "success": "Operation successful"
-  },
-  "metrics": {
-    "sysmet": "System Metrics",
-    "memory": "Memory",
-    "totalHeap": "Total Heap",
-    "usedHeap": "Used Heap",
-    "rss": "RSS",
-    "cpu": {
-      "user": "User",
-      "system": "System"
-    },
-    "uptime": {
-      "value": "Uptime",
-      "unit": "Hours"
-    }
   },
   "tables": {
     "key": {
@@ -136,5 +104,30 @@
       "edit": "Edit a Category",
       "delete": "Delete a Category"
     }
+  },
+  "messages": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Operation successful"
+  },
+  "login": {
+    "title": "Login",
+    "email": "Email Address",
+    "password": "Password",
+    "submit": "Login"
+  },
+  "logout": "Logout",
+  "error": "Error",
+  "metrics": {
+    "sysmet": "System Metrics",
+    "memory": "Memory",
+    "totalHeap": "Total Heap",
+    "usedHeap": "Used Heap",
+    "rss": "RSS",
+    "cpu": "CPU",
+    "user": "User",
+    "system": "System",
+    "uptime": "Uptime",
+    "hours": "Hours"
   }
 }

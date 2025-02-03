@@ -1,7 +1,6 @@
 'use server';
 
 import Header from '@/components/header';
-import Text from '@/components/textLocale';
 import UpdateAlbumForm from '@/components/update/album';
 import { headers } from 'next/headers';
 
@@ -18,9 +17,9 @@ const UpdateAlbumPage = async ({ params }: UpdateAlbumPageProps) => {
   return (
     <div>
       <Header locale={locale} />
-      <h1>
+      {/* <h1>
         <Text locale={locale} text="title.form_update_album" />
-      </h1>
+      </h1> */}
       <UpdateAlbumForm id={id} locale={locale} />
     </div>
   );
