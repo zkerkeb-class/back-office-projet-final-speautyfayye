@@ -3,6 +3,7 @@
 import { AppDispatch } from '@/store';
 import { fetchAllAlbums } from '@/store/slices/albumSlice';
 import { fetchAllArtists } from '@/store/slices/artistSlice';
+import { fetchAllCategories } from '@/store/slices/categorySlice';
 import { fetchAllPlaylists } from '@/store/slices/playlistSlice';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -16,7 +17,7 @@ interface TablePickerProps {
   tab?: 'playlists' | 'artists' | 'albums';
 }
 
-const TablePicker: React.FC<TablePickerProps> = ({ locale, tab = 'albums' }) => {
+const TablePicker: React.FC<TablePickerProps> = ({ locale, tab = 'playlists' }) => {
   console.log('🚀 ~ tab:', tab);
   const [view, setView] = useState<'playlists' | 'artists' | 'albums'>(tab);
   const dispatch = useDispatch<AppDispatch>();
@@ -25,6 +26,7 @@ const TablePicker: React.FC<TablePickerProps> = ({ locale, tab = 'albums' }) => 
     dispatch(fetchAllPlaylists());
     dispatch(fetchAllArtists());
     dispatch(fetchAllAlbums());
+    dispatch(fetchAllCategories());
   }, [dispatch]);
 
   return (

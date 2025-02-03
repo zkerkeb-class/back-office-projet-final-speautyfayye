@@ -1,60 +1,81 @@
 'use client';
 
+import ErrorComponent from '@/components/error';
 import Text from '@/components/textLocale';
 import { AppDispatch, RootState } from '@/store';
-import { createArtist } from '@/store/slices/artistSlice';
+import { Artist, fetchArtist, updateArtist } from '@/store/slices/artistSlice';
 import { fetchAllCategories } from '@/store/slices/categorySlice';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-interface CreateArtistFormProps {
+interface UpdateArtistFormProps {
+  id: string;
   locale: string;
 }
 
-const CreateArtistForm = ({ locale }: CreateArtistFormProps) => {
-  const router = useRouter();
+const UpdateArtistForm = ({ id, locale }: UpdateArtistFormProps) => {
   const dispatch = useDispatch<AppDispatch>();
-  //   const { loading, error } = useSelector((state: RootState) => state.selectedArtist);
-  const { loading, error } = useSelector((state: RootState) => state.selectedArtist);
+  const router = useRouter();
+  const { artist, loading, error } = useSelector((state: RootState) => state.selectedArtist);
   const { categories } = useSelector((state: RootState) => state.selectedCategory);
 
-  const [name, setName] = useState('');
-  const [categoryId, setCategoryId] = useState<number | null>(null);
-  const [bio, setBio] = useState('');
+  const [name, setName] = useState<string>('');
+  const [categoryId, setCategoryId] = useState<number>(0);
+  const [bio, setBio] = useState<string>('');
   const [picture, setPicture] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchArtist(id));
+      dispatch(fetchAllCategories());
+    }
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (artist) {
+      setName(artist.name);
+      setCategoryId(artist.category_id);
+      setBio(artist.bio);
+      setPicture(artist.picture);
+    }
+  }, [artist]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (name && categoryId !== null && bio) {
-      dispatch(createArtist({ name, category_id: categoryId, bio, picture }))
+    if (artist) {
+      let updatedArtist: Artist = {
+        ...artist,
+        name,
+        bio,
+        picture,
+        category_id: categoryId,
+      };
+      // const { artist: artisted, tracks, ...rest } = updatedArtist;
+      const { tracks, ...rest } = updatedArtist;
+      updatedArtist = rest;
+      console.log(updatedArtist);
+
+      dispatch(updateArtist(updatedArtist))
         .unwrap()
         .then(() => {
-          console.info('Artist created successfully');
           router.push(`/${locale}/dashboard?tab=artists`);
-        })
-        .catch((err) => {
-          console.error('Failed to create artist:', err);
         });
     }
   };
 
-  useEffect(() => {
-    dispatch(fetchAllCategories());
-  }, [dispatch]);
-
   return (
     <div>
+      {loading && (
+        <div>
+          <Text locale={locale} text="update.loading" />
+        </div>
+      )}{' '}
+      {error && <ErrorComponent message={error} />}
       <form onSubmit={handleSubmit}>
         <div className="flex">
-          <Text locale={locale} text="tables.key.name" />:
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
+          <Text locale={locale} text="tables.key.name" /> :
+          <input type="text" id="title" value={name} onChange={(e) => setName(e.target.value)} />
         </div>
         <div className="flex">
           <Text locale={locale} text="tables.key.category_id" />:
@@ -88,17 +109,12 @@ const CreateArtistForm = ({ locale }: CreateArtistFormProps) => {
             onChange={(e) => setPicture(e.target.value)}
           />
         </div>
-        <button type="submit" disabled={loading}>
-          {loading ? (
-            <Text locale={locale} text="create.loading" />
-          ) : (
-            <Text locale={locale} text="create.artist" />
-          )}
+        <button type="submit">
+          <Text locale={locale} text="update.playlist" />
         </button>
       </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
 };
 
-export default CreateArtistForm;
+export default UpdateArtistForm;

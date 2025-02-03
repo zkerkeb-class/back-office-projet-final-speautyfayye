@@ -25,11 +25,7 @@ const CreatePlaylistForm = ({ locale }: createPlaylistFormProps) => {
       dispatch(createPlaylist({ title, user_id: userId }))
         .unwrap()
         .then(() => {
-          console.info('Playlist created successfully');
           router.push(`/${locale}/dashboard?tab=playlists`);
-        })
-        .catch((err) => {
-          console.error('Failed to create playlist:', err);
         });
     }
   };

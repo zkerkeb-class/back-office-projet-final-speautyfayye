@@ -6,7 +6,15 @@ interface ErrorComponentProps {
 
 const ErrorComponent: React.FC<ErrorComponentProps> = ({ message }) => {
   return (
-    <div style={{ color: 'red', padding: '10px', border: '1px solid red', borderRadius: '5px' }}>
+    <div
+      style={{
+        color: 'red',
+        padding: '10px',
+        border: '1px solid red',
+        borderRadius: '5px',
+        margin: '5px',
+      }}
+    >
       <strong>Error:</strong> {message}
     </div>
   );

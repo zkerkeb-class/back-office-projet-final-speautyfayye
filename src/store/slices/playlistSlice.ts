@@ -1,4 +1,4 @@
-import { API_CRUD, API_ROUTES } from '@/utils/constants';
+import { API_ROUTES } from '@/utils/constants';
 import { removeKey } from '@/utils/helpers';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
@@ -15,7 +15,7 @@ interface SelectedPlaylistState {
   error: string | null;
 }
 
-type createPlaylist = Omit<Playlist, 'id'>;
+type CreatePlaylist = Omit<Playlist, 'id'>;
 
 // État initial
 const initialState: SelectedPlaylistState = {
@@ -50,6 +50,10 @@ export const fetchAllPlaylists = createAsyncThunk(
   'selectedPlaylist/fetchAllPlaylists',
   async (_, { rejectWithValue }) => {
     try {
+      console.log(
+        '🚀 ~ `${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.PLAYLIST}`:',
+        `${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.PLAYLIST}`,
+      );
       const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.PLAYLIST}`);
       if (!response.ok) {
         throw new Error('Failed to fetch playlists');
@@ -67,10 +71,8 @@ export const fetchAllPlaylists = createAsyncThunk(
 // Thunk pour créer une nouvelle Playlist
 export const createPlaylist = createAsyncThunk(
   'selectedPlaylist/createPlaylist',
-  async (newPlaylist: createPlaylist, { rejectWithValue }) => {
+  async (newPlaylist: CreatePlaylist, { rejectWithValue }) => {
     try {
-      console.log(`${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.PLAYLIST}`);
-
       const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.PLAYLIST}`, {
         method: 'POST',
         headers: {
@@ -95,7 +97,7 @@ export const updatePlaylist = createAsyncThunk(
   async (updatedPlaylist: Playlist, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.PLAYLIST}${API_CRUD.UPDATE}${updatedPlaylist.id}`,
+        `${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.PLAYLIST}${updatedPlaylist.id}`,
         {
           method: 'PUT',
           headers: {

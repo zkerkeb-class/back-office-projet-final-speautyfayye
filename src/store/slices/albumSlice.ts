@@ -1,12 +1,14 @@
-import { API_CRUD, API_ROUTES } from '@/utils/constants';
+import { API_ROUTES } from '@/utils/constants';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-interface Album {
+export interface Album {
   id: number;
   title: string;
   releaseDate: Date;
   category_id: number;
   picture: string | undefined;
+  artist?: any;
+  tracks?: any;
 }
 
 interface SelectedAlbumState {
@@ -33,7 +35,7 @@ export const fetchAlbum = createAsyncThunk(
       if (!response.ok) {
         throw new Error('Failed to fetch album');
       }
-      return (await response.json()) as Album;
+      return (await response.json()).data as Album;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -101,7 +103,7 @@ export const updateAlbum = createAsyncThunk(
   async (album: Album, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_URL_API}${API_CRUD.UPDATE}${API_ROUTES.ALBUM}`,
+        `${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.ALBUM}${album.id}`,
         {
           method: 'PUT',
           headers: {

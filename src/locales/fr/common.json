@@ -8,8 +8,11 @@
   },
   "title": {
     "form_create_playlist": "Formulaire de création de playlist",
+    "form_update_playlist": "Formulaire de modification de playlist",
     "form_create_artist": "Formulaire de création d'artiste",
-    "form_create_album": "Formulaire de création d'album"
+    "form_update_artist": "Formulaire de modification d'artiste",
+    "form_create_album": "Formulaire de création d'album",
+    "form_update_album": "Formulaire de modification d'album"
   },
   "actions": {
     "save": "Enregistrer",
@@ -31,6 +34,12 @@
     "playlist": "Créer la playlist",
     "artist": "Créer l'artiste",
     "album": "Créer l'album"
+  },
+  "update": {
+    "loading": "Mise à jour en cours...",
+    "playlist": "Mettre à jour la playlist",
+    "artist": "Mettre à jour l'artiste",
+    "album": "Mettre à jour l'album"
   },
   "tables": {
     "key": {
@@ -74,7 +83,8 @@
       "title": "Tableau des artistes",
       "create": "Créer un artiste",
       "edit": "Modifier un artiste",
-      "delete": "Supprimer un artiste"
+      "delete": "Supprimer un artiste",
+      "noCategory": "Aucune catégorie trouvée"
     },
     "categories": {
       "title": "Tableau des catégories",

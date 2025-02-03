@@ -14,6 +14,7 @@ interface TAlbumProps {
 const TableAlbum = ({ locale }: TAlbumProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { albums, loading, error } = useSelector((state: RootState) => state.selectedAlbum);
+  const { categories } = useSelector((state: RootState) => state.selectedCategory);
 
   return (
     <div>
@@ -58,7 +59,11 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
                         {row.title}
                       </td>
                       <td className="px-6 py-2">{row.releaseDate.toString()}</td>
-                      <td className="px-6 py-2">{row.category_id}</td>
+                      <td className="px-6 py-2">
+                        {(categories &&
+                          categories!.find((category) => category.id === row.category_id)
+                            ?.name) || <Text locale={locale} text="tables.artists.noCategory" />}
+                      </td>
                       {/* <td className="px-6 py-2">{row.picture}</td> */}
                       <td className="px-6 py-2">
                         {row.picture ? (
@@ -102,9 +107,9 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
                           <Text locale={locale} text="actions.delete" />
                         </button>
                         <p>|</p>
-                        <button onClick={() => console.log('update')}>
+                        <Link href={`/${locale}/update/album/${row.id}`}>
                           <Text locale={locale} text="actions.edit" />
-                        </button>
+                        </Link>
                       </td>
                     </tr>
                   ))

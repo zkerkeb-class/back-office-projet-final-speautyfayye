@@ -63,9 +63,9 @@ const TablePlaylist = ({ locale }: TPlaylistProps) => {
                           <Text locale={locale} text="actions.delete" />
                         </button>
                         <p>|</p>
-                        <button onClick={() => console.log('update')}>
+                        <Link href={`/${locale}/update/playlist/${row.id}`}>
                           <Text locale={locale} text="actions.edit" />
-                        </button>
+                        </Link>
                       </td>
                     </tr>
                   ))
