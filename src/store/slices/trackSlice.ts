@@ -53,8 +53,8 @@ export const fetchAllTracks = createAsyncThunk(
       if (!response.ok) {
         throw new Error('Failed to fetch tracks');
       }
-      const data = await response.json();
-      return data.data as Track[];
+
+      return (await response.json()).data as Track[];
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -75,8 +75,8 @@ export const createTrack = createAsyncThunk(
       if (!response.ok) {
         throw new Error('Failed to create track');
       }
-      const data = await response.json();
-      return data.data as Track;
+
+      return (await response.json()).data as Track;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -120,8 +120,8 @@ export const updateTrack = createAsyncThunk(
       if (!response.ok) {
         throw new Error('Failed to update track');
       }
-      const data = await response.json();
-      return data.data as Track;
+
+      return (await response.json()).data as Track;
     } catch (error) {
       return rejectWithValue(error);
     }

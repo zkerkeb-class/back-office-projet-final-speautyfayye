@@ -12,7 +12,9 @@
     "form_create_artist": "Formulaire de création d'artiste",
     "form_update_artist": "Formulaire de modification d'artiste",
     "form_create_album": "Formulaire de création d'album",
-    "form_update_album": "Formulaire de modification d'album"
+    "form_update_album": "Formulaire de modification d'album",
+    "form_create_track": "Formulaire de création de musique",
+    "form_update_track": "Formulaire de modification de musique"
   },
   "actions": {
     "save": "Enregistrer",
@@ -34,13 +36,15 @@
     "loading": "Création en cours...",
     "playlist": "Créer la playlist",
     "artist": "Créer l'artiste",
-    "album": "Créer l'album"
+    "album": "Créer l'album",
+    "track": "Créer la musique"
   },
   "update": {
     "loading": "Mise à jour en cours...",
     "playlist": "Mettre à jour la playlist",
     "artist": "Mettre à jour l'artiste",
-    "album": "Mettre à jour l'album"
+    "album": "Mettre à jour l'album",
+    "track": "Mettre à jour la musique"
   },
   "tables": {
     "key": {

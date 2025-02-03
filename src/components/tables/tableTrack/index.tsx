@@ -2,7 +2,7 @@
 
 import StreamImage from '@/components/streamImage';
 import { AppDispatch, RootState } from '@/store'; // Assurez-vous que AppDispatch est correctement configuré
-import { deleteAlbum } from '@/store/slices/albumSlice';
+import { deleteTrack } from '@/store/slices/trackSlice';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import ErrorComponent from '../../error';
@@ -59,8 +59,10 @@ const TableTrack = ({ locale }: TAlbumProps) => {
                       <td className="whitespace-nowrap px-6 py-2 font-medium text-gray-900 dark:text-white">
                         {row.title}
                       </td>
-                      <td className="px-6 py-2">{row.duration?.toString()}</td>
-                      <td className="px-6 py-2">{row.releaseDate.toString()}</td>
+                      <td className="px-6 py-2">{row.duration && Math.floor(row.duration)}</td>
+                      <td className="px-6 py-2">
+                        {row.releaseDate && row.releaseDate.toString().split('T')[0]}
+                      </td>
                       <td className="px-6 py-2">{row.trackNumber.toString()}</td>
                       <td className="px-6 py-2">{row.number_of_plays.toString()}</td>
                       <td className="px-6 py-2">{row.lyrics?.substring(0, 50)}</td>
@@ -68,7 +70,7 @@ const TableTrack = ({ locale }: TAlbumProps) => {
                       <td className="px-6 py-2">
                         {(categories &&
                           categories!.find((category) => category.id === row.category_id)
-                            ?.name) || <Text locale={locale} text="tables.artists.noCategory" />}
+                            ?.name) || <Text locale={locale} text="tables.tracks.noCategory" />}
                       </td>
                       <td className="px-6 py-2">
                         {row.picture ? (
@@ -84,11 +86,11 @@ const TableTrack = ({ locale }: TAlbumProps) => {
                       <td className="px-6 py-2">{row.audio}</td>
 
                       <td className="flex items-center gap-2 px-6 py-2">
-                        <button onClick={() => dispatch(deleteAlbum(row.id))}>
+                        <button onClick={() => dispatch(deleteTrack(row.id))}>
                           <Text locale={locale} text="actions.delete" />
                         </button>
                         <p>|</p>
-                        <Link href={`/${locale}/update/album/${row.id}`}>
+                        <Link href={`/${locale}/update/track/${row.id}`}>
                           <Text locale={locale} text="actions.edit" />
                         </Link>
                       </td>
@@ -108,7 +110,7 @@ const TableTrack = ({ locale }: TAlbumProps) => {
                 >
                   <Link
                     className="font-medium text-gray-800 no-underline"
-                    href={`/${locale}/create/album`}
+                    href={`/${locale}/create/track`}
                   >
                     <Text
                       locale={locale}
