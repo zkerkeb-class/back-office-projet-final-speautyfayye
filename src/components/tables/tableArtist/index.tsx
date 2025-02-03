@@ -60,7 +60,9 @@ const TableArtist = ({ locale }: TArtistProps) => {
                           {row.name}
                         </td>
                         <td className="px-6 py-2">
-                          {categories!.find((category) => category.id === row.category_id)?.name}
+                          {(categories &&
+                            categories!.find((category) => category.id === row.category_id)
+                              ?.name) || <Text locale={locale} text="tables.artists.noCategory" />}
                         </td>
 
                         <td className="px-6 py-2">{row.bio && row.bio.substring(0, 50)}</td>
@@ -70,9 +72,9 @@ const TableArtist = ({ locale }: TArtistProps) => {
                             <Text locale={locale} text="actions.delete" />
                           </button>
                           <p>|</p>
-                          <button onClick={() => console.log('update')}>
+                          <Link href={`/${locale}/update/artist/${row.id}`}>
                             <Text locale={locale} text="actions.edit" />
-                          </button>
+                          </Link>
                         </td>
                       </tr>
                     ))
