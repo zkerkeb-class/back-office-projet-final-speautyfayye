@@ -108,7 +108,7 @@ const TableTrack = ({ locale }: TAlbumProps) => {
                 >
                   <Link
                     className="font-medium text-gray-800 no-underline"
-                    href={`/${locale}/create/album`}
+                    href={`/${locale}/create/track`}
                   >
                     <Text
                       locale={locale}
