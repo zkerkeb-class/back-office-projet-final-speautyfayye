@@ -39,42 +39,22 @@ export const fetchCategory = createAsyncThunk(
     }
   },
 );
+
 export const fetchAllCategories = createAsyncThunk(
-  'selectedCategory/fetchAllCategoriesSimulated',
-  async (_, { dispatch, rejectWithValue }) => {
+  'selectedCategory/fetchAllCategories',
+  async (_, { rejectWithValue }) => {
     try {
-      const categoryIds = [1, 2, 3, 4, 5, 6, 7]; // Example category IDs
-      const categories = await Promise.all(
-        categoryIds.map(async (id) => {
-          const result = await dispatch(fetchCategory(id.toString()));
-          if (fetchCategory.fulfilled.match(result)) {
-            return result.payload;
-          } else {
-            throw new Error('Failed to fetch category');
-          }
-        }),
-      );
-      return categories as Category[];
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.CATEGORY}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch categories');
+      }
+      const data = await response.json();
+      return data.data as Category[];
     } catch (error) {
       return rejectWithValue(error);
     }
   },
 );
-// export const fetchAllCategories = createAsyncThunk(
-//   'selectedCategory/fetchAllCategories',
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.CATEGORY}`);
-//       if (!response.ok) {
-//         throw new Error('Failed to fetch categories');
-//       }
-//       const data = await response.json();
-//       return data.data as Category[];
-//     } catch (error) {
-//       return rejectWithValue(error);
-//     }
-//   },
-// );
 
 export const createCategory = createAsyncThunk(
   'selectedCategory/createCategory',
