@@ -1,11 +1,14 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function LoginForm({ locale }: { locale: string }) {
+  const router = useRouter();
+
   useEffect(() => {
     if (localStorage.getItem('token')) {
-      window.location.href = `/${locale}/dashboard`;
+      router.push(`/${locale}/dashboard`);
     }
   }, []);
 
@@ -21,7 +24,7 @@ export default function LoginForm({ locale }: { locale: string }) {
     });
     if (response.ok) {
       const data = await response.json();
-      localStorage.setItem('token', data.token);
+      localStorage.setItem('token', data.accessToken);
       window.location.href = `/${locale}/dashboard`;
     }
   };

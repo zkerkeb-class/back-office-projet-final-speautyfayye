@@ -1,16 +1,23 @@
 'use client';
 
-import React from 'react';
-import { useEffect, useState } from 'react';
 import {
   fetchAllMetrics,
-  type SystemMetrics,
   type RequestMetrics,
+  type SystemMetrics,
 } from '@/services/metrics.services';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-const Metrics: React.FC = () => {
+const Metrics = ({ locale }: { locale: string }) => {
   const [systemMetrics, setSystemMetrics] = useState<SystemMetrics | null>(null);
   const [requestMetrics, setRequestMetrics] = useState<RequestMetrics | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!localStorage.getItem('token')) {
+      router.push(`/${locale}/login`);
+    }
+  }, []);
 
   useEffect(() => {
     const updateMetrics = async () => {
