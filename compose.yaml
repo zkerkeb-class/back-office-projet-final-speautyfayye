@@ -1,0 +1,9 @@
+name: speautyfayye-backoffice
+services:
+  back-office:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 2999:3000
+    env_file: .env
