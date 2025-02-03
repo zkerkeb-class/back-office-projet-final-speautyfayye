@@ -1,51 +1,94 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-
-interface SystemPerformance {
-  cpuUsage: number;
-  memoryUsage: number;
-  diskUsage: string;
-}
-
-interface ApiPerformance {
-  averageResponseTime: number;
-}
+import React from 'react';
+import { useEffect, useState } from 'react';
+import {
+  fetchAllMetrics,
+  type SystemMetrics,
+  type RequestMetrics,
+} from '@/services/metrics.services';
 
 const Metrics: React.FC = () => {
-  const [performance, setPerformance] = useState<SystemPerformance>({
-    cpuUsage: 0,
-    memoryUsage: 0,
-    diskUsage: '5To',
-  });
-
-  const [apiPerformance, setApiPerformance] = useState<ApiPerformance>({
-    averageResponseTime: 0,
-  });
+  const [systemMetrics, setSystemMetrics] = useState<SystemMetrics | null>(null);
+  const [requestMetrics, setRequestMetrics] = useState<RequestMetrics | null>(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      // Simulate fetching system performance data
-      const cpuUsage = Math.random() * 100;
-      const memoryUsage = Math.random() * 100;
-      const averageResponseTime = Math.random() * 250;
+    const updateMetrics = async () => {
+      try {
+        const { systemMetrics, requestMetrics } = await fetchAllMetrics();
+        setSystemMetrics(systemMetrics);
+        setRequestMetrics(requestMetrics);
+      } catch (error) {
+        console.error('Erreur lors de la mise à jour des métriques:', error);
+      }
+    };
 
-      setPerformance({ cpuUsage, memoryUsage, diskUsage: '5To' });
-      setApiPerformance({ averageResponseTime });
-    }, 1000);
-
+    updateMetrics();
+    const interval = setInterval(updateMetrics, 5000);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div>
-      <h2>System Performance</h2>
+    <div className="p-4">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-2">
+        {/* Métriques Système */}
+        <div className="rounded-lg bg-white p-4 shadow">
+          <h2 className="mb-4 text-xl font-bold">Métriques Système</h2>
+          {systemMetrics && (
+            <>
+              <div className="space-y-2">
+                <h3 className="font-semibold">Mémoire</h3>
+                <p>Heap Utilisé: {systemMetrics.memory.heapUsed}</p>
+                <p>Heap Total: {systemMetrics.memory.heapTotal}</p>
+                <p>RSS: {systemMetrics.memory.rss}</p>
+              </div>
+              <div className="mt-4 space-y-2">
+                <h3 className="font-semibold">CPU</h3>
+                <p>User: {(systemMetrics.cpu.user / 1000000).toFixed(2)}s</p>
+                <p>System: {(systemMetrics.cpu.system / 1000000).toFixed(2)}s</p>
+              </div>
+              <p className="mt-4">Uptime: {(systemMetrics.uptime / 3600).toFixed(2)} heures</p>
+            </>
+          )}
+        </div>
 
-      <p>CPU Usage: {performance.cpuUsage.toFixed(2)}%</p>
-      <p>Memory Usage: {performance.memoryUsage.toFixed(2)}%</p>
-      <p>Disk Usage: {performance.diskUsage}</p>
-      <h2>API Performance</h2>
-      <p>Average Response Time: {apiPerformance.averageResponseTime.toFixed(2)}ms</p>
+        {/* Métriques des Requêtes */}
+        <div className="rounded-lg bg-white p-4 shadow">
+          <h2 className="mb-4 text-xl font-bold">Métriques des Requêtes</h2>
+          {requestMetrics && (
+            <>
+              <div className="space-y-2">
+                <p>Total Requêtes: {requestMetrics.totalRequests}</p>
+                <p>Requêtes Réussies: {requestMetrics.successfulRequests}</p>
+                <p>Requêtes Échouées: {requestMetrics.failedRequests}</p>
+                <p>Taux de Succès: {requestMetrics.successRate}</p>
+              </div>
+              <div className="mt-4">
+                <h3 className="mb-2 font-semibold">Top 5 Endpoints</h3>
+                <div className="space-y-2">
+                  {requestMetrics.requestsByEndpoint
+                    .sort((a, b) => b.total - a.total)
+                    .slice(0, 5)
+                    .map((endpoint, index) => (
+                      <div key={index} className="text-sm">
+                        <p className="font-medium">{endpoint.endpoint}</p>
+                        <p className="text-gray-600">
+                          Total: {endpoint.total} | Temps moyen: {endpoint.averageResponseTime}
+                        </p>
+                      </div>
+                    ))}
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <h3 className="font-semibold">Requêtes Base de Données</h3>
+                <p>Total Requêtes: {requestMetrics.totalDbQueries.totalQueries}</p>
+                <p>Temps Moyen: {requestMetrics.totalDbQueries.averageQueryTime}</p>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
