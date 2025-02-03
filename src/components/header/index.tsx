@@ -11,6 +11,13 @@ interface HeaderProps {
 }
 
 const Header = ({ locale }: HeaderProps) => {
+  const isLogged = localStorage.getItem('token');
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    window.location.href = `/${locale}/login`;
+  };
+
   return (
     <header className="flex items-center justify-between bg-white p-4 shadow-md">
       <div className="text-2xl font-bold text-gray-800">
@@ -34,12 +41,15 @@ const Header = ({ locale }: HeaderProps) => {
       </nav>
       <div className="flex items-center gap-4">
         <LanguageDropdown locale={locale} />
-        <a
-          href="/login"
-          className="rounded border border-gray-300 p-2 font-medium text-gray-700 no-underline"
-        >
-          <Text locale={locale} text="navigation.login" />
-        </a>
+        {isLogged ? (
+          <button onClick={logout}>
+            <p>Se déconnecter</p>
+          </button>
+        ) : (
+          <Link href={`/${locale}/login`}>
+            <Text locale={locale} text="navigation.login" />
+          </Link>
+        )}
       </div>
     </header>
   );
