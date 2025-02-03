@@ -1,6 +1,6 @@
 name: speautyfayye
 services:
-  front:
+  back-office:
     build:
       context: .
       dockerfile: ./Dockerfile
