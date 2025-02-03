@@ -7,7 +7,7 @@ export default function LoginForm({ locale }: { locale: string }) {
   const router = useRouter();
 
   useEffect(() => {
-    if (localStorage.getItem('token')) {
+    if (localStorage && localStorage.getItem('token')) {
       router.push(`/${locale}/dashboard`);
     }
   }, []);

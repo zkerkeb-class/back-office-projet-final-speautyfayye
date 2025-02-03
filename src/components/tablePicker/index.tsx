@@ -24,7 +24,7 @@ const TablePicker: React.FC<TablePickerProps> = ({ locale, tab = 'playlists' }) 
   const router = useRouter();
 
   useEffect(() => {
-    if (!localStorage.getItem('token')) {
+    if (!localStorage?.getItem('token')) {
       router.push(`/${locale}/login`);
     }
   }, []);

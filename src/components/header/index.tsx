@@ -11,7 +11,7 @@ interface HeaderProps {
 }
 
 const Header = ({ locale }: HeaderProps) => {
-  const isLogged = localStorage.getItem('token');
+  const isLogged = localStorage !== undefined && localStorage.getItem('token');
 
   const logout = () => {
     localStorage.removeItem('token');
