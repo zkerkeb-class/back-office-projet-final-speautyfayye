@@ -1,7 +1,9 @@
 'use client';
 
+import StreamImage from '@/components/streamImage';
 import { AppDispatch, RootState } from '@/store'; // Assurez-vous que AppDispatch est correctement configuré
 import { deleteAlbum } from '@/store/slices/albumSlice';
+import { EEntityTypeId, upload } from '@/utils/upload';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import ErrorComponent from '../../error';
@@ -14,6 +16,12 @@ interface TAlbumProps {
 const TableAlbum = ({ locale }: TAlbumProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { albums, loading, error } = useSelector((state: RootState) => state.selectedAlbum);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
+    const files = event.target.files;
+    if (!files?.length) return;
+    upload(EEntityTypeId.album, id, files);
+  };
 
   return (
     <div>
@@ -62,39 +70,15 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
                       {/* <td className="px-6 py-2">{row.picture}</td> */}
                       <td className="px-6 py-2">
                         {row.picture ? (
-                          // TODO: A tester quand une image est disponible
-                          <div>
-                            <button
-                              onClick={() => {
-                                const modal = document.createElement('div');
-                                modal.style.position = 'fixed';
-                                modal.style.top = '0';
-                                modal.style.left = '0';
-                                modal.style.width = '100%';
-                                modal.style.height = '100%';
-                                modal.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-                                modal.style.display = 'flex';
-                                modal.style.justifyContent = 'center';
-                                modal.style.alignItems = 'center';
-                                modal.style.zIndex = '1000';
-
-                                const img = document.createElement('img');
-                                img.src = row.picture!;
-                                img.alt = row.title;
-                                img.style.maxWidth = '90%';
-                                img.style.maxHeight = '90%';
-
-                                modal.appendChild(img);
-                                modal.addEventListener('click', () => {
-                                  document.body.removeChild(modal);
-                                });
-
-                                document.body.appendChild(modal);
-                              }}
-                            ></button>
-                          </div>
+                          <>
+                            <StreamImage size={200} imageId={row.picture} />
+                            <input type="file" onChange={(e) => handleFileChange(e, row.id)} />
+                          </>
                         ) : (
-                          <Text locale={locale} text="tables.albums.noImage" />
+                          <>
+                            <Text locale={locale} text="tables.albums.noImage" />
+                            <input type="file" onChange={(e) => handleFileChange(e, row.id)} />
+                          </>
                         )}
                       </td>
                       <td className="flex items-center gap-2 px-6 py-2">

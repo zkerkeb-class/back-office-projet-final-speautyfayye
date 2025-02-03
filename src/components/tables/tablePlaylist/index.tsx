@@ -2,7 +2,6 @@
 
 import { AppDispatch, RootState } from '@/store'; // Assurez-vous que AppDispatch est correctement configuré
 import { deletePlaylist } from '@/store/slices/playlistSlice';
-import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import ErrorComponent from '../../error';
 import Text from '../../textLocale';
@@ -76,23 +75,6 @@ const TablePlaylist = ({ locale }: TPlaylistProps) => {
                       </td>
                     </tr>
                   )}
-              <tr>
-                <td
-                  colSpan={4}
-                  className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400"
-                >
-                  <Link
-                    className="font-medium text-gray-800 no-underline"
-                    href={`/${locale}/create/playlist`}
-                  >
-                    <Text
-                      locale={locale}
-                      text="tables.playlists.create"
-                      style="whitespace-nowrap px-6 py-2 font-medium text-gray-900 dark:text-white "
-                    />
-                  </Link>
-                </td>
-              </tr>
             </tbody>
           </table>
           <div className="w-full bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400"></div>
