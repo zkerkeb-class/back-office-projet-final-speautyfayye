@@ -2,6 +2,17 @@
 
 import ErrorComponent from '@/components/error';
 import Text from '@/components/textLocale';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import useTranslation from '@/customHook/useTranslation';
 import { AppDispatch, RootState } from '@/store';
 import { createAlbum } from '@/store/slices/albumSlice';
@@ -9,17 +20,6 @@ import { fetchAllCategories } from '@/store/slices/categorySlice';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 interface CreateAlbumFormProps {
   locale: string;
@@ -43,7 +43,7 @@ const CreateAlbumForm = ({ locale }: CreateAlbumFormProps) => {
         createAlbum({
           title,
           releaseDate: new Date(releaseDate),
-          category_id: categoryId
+          category_id: categoryId,
         }),
       )
         .unwrap()
@@ -62,9 +62,9 @@ const CreateAlbumForm = ({ locale }: CreateAlbumFormProps) => {
   }, []);
 
   return (
-    <Card className="w-[400px] mx-auto mt-10">
+    <Card className="mx-auto mt-10 w-[400px]">
       <CardHeader>
-        <h2 className="text-2xl font-bold text-center">
+        <h2 className="text-center text-2xl font-bold">
           <Text locale={locale} text="title.form_create_album" />
         </h2>
       </CardHeader>
@@ -74,12 +74,7 @@ const CreateAlbumForm = ({ locale }: CreateAlbumFormProps) => {
             <Label htmlFor="title">
               <Text locale={locale} text="tables.key.title" />
             </Label>
-            <Input
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
+            <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
           </div>
           <div className="space-y-2">
             <Label htmlFor="releaseDate">
@@ -126,21 +121,16 @@ const CreateAlbumForm = ({ locale }: CreateAlbumFormProps) => {
           </div> */}
         </CardContent>
         <CardFooter>
-          <Button 
-            type="submit" 
-            disabled={loading}
-            className="w-full"
-          >
+          <Button type="submit" disabled={loading} className="w-full">
             {loading ? (
               <Text locale={locale} text="create.loading" />
             ) : (
               <Text locale={locale} text="create.album" />
-
             )}
           </Button>
         </CardFooter>
       </form>
-      {error && <ErrorComponent message={error} />}
+      {error && <ErrorComponent message={error} locale={locale} />}
     </Card>
   );
 };

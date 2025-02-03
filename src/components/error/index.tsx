@@ -1,10 +1,12 @@
 import React from 'react';
+import Text from '../textLocale';
 
 interface ErrorComponentProps {
   message: string;
+  locale: string;
 }
 
-const ErrorComponent: React.FC<ErrorComponentProps> = ({ message }) => {
+const ErrorComponent: React.FC<ErrorComponentProps> = ({ message, locale }) => {
   return (
     <div
       style={{
@@ -15,7 +17,10 @@ const ErrorComponent: React.FC<ErrorComponentProps> = ({ message }) => {
         margin: '5px',
       }}
     >
-      <strong>Error:</strong> {message}
+      <strong>
+        <Text locale={locale} text="error" />:
+      </strong>
+      {message}
     </div>
   );
 };

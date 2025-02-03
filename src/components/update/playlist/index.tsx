@@ -53,8 +53,8 @@ const UpdatePlaylistForm = ({ id, locale }: UpdatePlaylistFormProps) => {
         <div>
           <Text locale={locale} text="update.loading" />
         </div>
-      )}{' '}
-      {error && <ErrorComponent message={error} />}
+      )}
+      {error && <ErrorComponent message={error} locale={locale} />}
       <form onSubmit={handleSubmit}>
         <div className="flex">
           <Text locale={locale} text="tables.key.title" /> :

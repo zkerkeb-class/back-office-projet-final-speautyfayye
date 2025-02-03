@@ -85,7 +85,7 @@ const UpdateArtistForm = ({ id, locale }: UpdateArtistFormProps) => {
           <Text locale={locale} text="update.loading" />
         </div>
       )}
-      {error && <ErrorComponent message={error} />}
+      {error && <ErrorComponent message={error} locale={locale} />}
       <form onSubmit={handleSubmit}>
         <div className="flex">
           <Text locale={locale} text="tables.key.name" /> :

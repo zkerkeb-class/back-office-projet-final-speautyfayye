@@ -1,6 +1,18 @@
 'use client';
 
+import ErrorComponent from '@/components/error';
 import Text from '@/components/textLocale';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import useTranslation from '@/customHook/useTranslation';
 import { AppDispatch, RootState } from '@/store';
 import { fetchAllCategories } from '@/store/slices/categorySlice';
@@ -8,17 +20,6 @@ import { uploadAudio } from '@/utils/upload';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 interface Props {
   locale: string;
@@ -70,46 +71,33 @@ const TrackForm = ({ locale }: Props) => {
   }, [dispatch]);
 
   return (
-    <Card className="w-[400px] mx-auto mt-10">
+    <Card className="mx-auto mt-10 w-[400px]">
       <CardHeader>
-        <h2 className="text-2xl font-bold text-center">
+        <h2 className="text-center text-2xl font-bold">
           <Text locale={locale} text="title.form_create_track" />
         </h2>
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="audio">Audio</Label>
-            <Input
-              id="audio"
-              type="file"
-              onChange={handleFileChange}
-              accept=".mp3"
-              required
-            />
+            <Label htmlFor="audio">
+              <Text locale={locale} text="tables.key.audio" />
+            </Label>
+            <Input id="audio" type="file" onChange={handleFileChange} accept=".mp3" required />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="title">
               <Text locale={locale} text="tables.key.title" />
             </Label>
-            <Input
-              id="title"
-              name="title"
-              required
-            />
+            <Input id="title" name="title" required />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="releaseDate">
               <Text locale={locale} text="tables.key.releaseDate" />
             </Label>
-            <Input
-              type="date"
-              id="releaseDate"
-              name="releaseDate"
-              required
-            />
+            <Input type="date" id="releaseDate" name="releaseDate" required />
           </div>
 
           <div className="space-y-2">
@@ -131,31 +119,24 @@ const TrackForm = ({ locale }: Props) => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="album_id">Album ID</Label>
-            <Input
-              type="number"
-              id="album_id"
-              name="album_id"
-            />
+            <Label htmlFor="album_id">
+              <Text locale={locale} text="tables.key.album_id" />
+            </Label>
+            <Input type="number" id="album_id" name="album_id" />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="lyrics">Lyrics</Label>
-            <Input
-              id="lyrics"
-              name="lyrics"
-            />
+            <Label htmlFor="lyrics">
+              <Text locale={locale} text="tables.key.lyrics" />
+            </Label>
+            <Input id="lyrics" name="lyrics" />
           </div>
 
           <input type="hidden" name="audio" value={id || ''} />
         </CardContent>
 
         <CardFooter>
-          <Button 
-            type="submit"
-            disabled={loading}
-            className="w-full"
-          >
+          <Button type="submit" disabled={loading} className="w-full">
             {loading ? (
               <Text locale={locale} text="create.loading" />
             ) : (
@@ -163,8 +144,8 @@ const TrackForm = ({ locale }: Props) => {
             )}
           </Button>
         </CardFooter>
-      </form> 
-      {error && <p className="text-red-500 text-center mt-2">{error}</p>}
+      </form>
+      {error && <ErrorComponent message={error} locale={locale} />}
     </Card>
   );
 };

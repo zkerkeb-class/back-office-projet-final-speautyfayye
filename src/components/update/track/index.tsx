@@ -1,9 +1,10 @@
 'use client';
 
+import ErrorComponent from '@/components/error';
 import Text from '@/components/textLocale';
-import useTranslation from '@/customHook/useTranslation';
 import { AppDispatch, RootState } from '@/store';
 import { fetchTrack, updateTrack } from '@/store/slices/trackSlice';
+import { EEntityTypeId, uploadImage } from '@/utils/upload';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,8 +14,7 @@ interface UpdateTrackFormProps {
   id: string;
 }
 
-const UpdateTrackForm = ({ locale, id: trackId }: UpdateTrackFormProps) => {
-  const { t } = useTranslation(locale);
+const UpdateTrackForm = ({ locale, id }: UpdateTrackFormProps) => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { track, loading, error } = useSelector((state: RootState) => state.selectedTrack);
@@ -31,8 +31,8 @@ const UpdateTrackForm = ({ locale, id: trackId }: UpdateTrackFormProps) => {
   const [lyrics, setLyrics] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    dispatch(fetchTrack(trackId));
-  }, [dispatch, trackId]);
+    dispatch(fetchTrack(id));
+  }, [dispatch, id]);
 
   useEffect(() => {
     if (track) {
@@ -52,7 +52,7 @@ const UpdateTrackForm = ({ locale, id: trackId }: UpdateTrackFormProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const updatedTrack = {
-      id: Number(trackId),
+      id: Number(id),
       title,
       duration,
       releaseDate: new Date(releaseDate),
@@ -73,6 +73,13 @@ const UpdateTrackForm = ({ locale, id: trackId }: UpdateTrackFormProps) => {
       .catch((err) => {
         console.error('Failed to update track:', err);
       });
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
+    const files = event.target.files;
+    if (!files?.length) return;
+    uploadImage(EEntityTypeId.track, id, files);
+    router.push(`/${locale}/dashboard?tab=albums`);
   };
 
   return (
@@ -139,12 +146,7 @@ const UpdateTrackForm = ({ locale, id: trackId }: UpdateTrackFormProps) => {
         </div>
         <div className="flex">
           <Text locale={locale} text="tables.key.picture" />:
-          <input
-            type="text"
-            id="picture"
-            value={picture || ''}
-            onChange={(e) => setPicture(e.target.value)}
-          />
+          <input type="file" onChange={(e) => handleFileChange(e, Number(id))} />
         </div>
         <div className="flex">
           <Text locale={locale} text="tables.key.audio" />:
@@ -182,7 +184,7 @@ const UpdateTrackForm = ({ locale, id: trackId }: UpdateTrackFormProps) => {
           )}
         </button>
       </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <ErrorComponent message={error} locale={locale} />}
     </div>
   );
 };

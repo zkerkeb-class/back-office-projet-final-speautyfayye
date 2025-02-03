@@ -8,12 +8,12 @@
   },
   "title": {
     "form_create_playlist": "Formulaire de création de playlist",
-    "form_update_playlist": "Formulaire de modification de playlist",
     "form_create_artist": "Formulaire de création d'artiste",
-    "form_update_artist": "Formulaire de modification d'artiste",
     "form_create_album": "Formulaire de création d'album",
-    "form_update_album": "Formulaire de modification d'album",
     "form_create_track": "Formulaire de création de musique",
+    "form_update_playlist": "Formulaire de modification de playlist",
+    "form_update_artist": "Formulaire de modification d'artiste",
+    "form_update_album": "Formulaire de modification d'album",
     "form_update_track": "Formulaire de modification de musique"
   },
   "actions": {
@@ -109,5 +109,25 @@
     "loading": "Chargement en cours...",
     "error": "Une erreur est survenue",
     "success": "Opération réussie"
+  },
+  "login": {
+    "title": "Connexion",
+    "email": "Adresse email",
+    "password": "Mot de passe",
+    "submit": "Se connecter"
+  },
+  "logout": "Se déconnecter",
+  "error": "Erreur",
+  "metrics": {
+    "sysmet": "Métriques système",
+    "memory": "Mémoire",
+    "totalHeap": "Mémoire totale",
+    "usedHeap": "Mémoire utilisée",
+    "rss": "RSS",
+    "cpu": "CPU",
+    "user": "Utilisateur",
+    "system": "Système",
+    "uptime": "Durée de fonctionnement",
+    "hours": "Heures"
   }
 }

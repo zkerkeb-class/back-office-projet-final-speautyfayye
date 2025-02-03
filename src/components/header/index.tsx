@@ -54,7 +54,7 @@ const Header = ({ locale }: HeaderProps) => {
         <LanguageDropdown locale={locale} />
         {isLogged ? (
           <button onClick={logout}>
-            <p>Se déconnecter</p>
+            <Text locale={locale} text="logout" />
           </button>
         ) : (
           <Link href={`/${locale}/login`}>

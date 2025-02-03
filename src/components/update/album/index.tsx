@@ -62,7 +62,7 @@ const UpdateAlbumForm = ({ id, locale }: UpdateAlbumFormProps) => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
     const files = event.target.files;
     if (!files?.length) return;
-    uploadImage(EEntityTypeId.artist, id, files);
+    uploadImage(EEntityTypeId.album, id, files);
     router.push(`/${locale}/dashboard?tab=albums`);
   };
 
@@ -72,8 +72,8 @@ const UpdateAlbumForm = ({ id, locale }: UpdateAlbumFormProps) => {
         <div>
           <Text locale={locale} text="update.loading" />
         </div>
-      )}{' '}
-      {error && <ErrorComponent message={error} />}
+      )}
+      {error && <ErrorComponent message={error} locale={locale} />}
       <form onSubmit={handleSubmit}>
         <div className="flex">
           <Text locale={locale} text="tables.key.title" />

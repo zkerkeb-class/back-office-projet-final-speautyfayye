@@ -38,7 +38,7 @@ const TableArtist = ({ locale }: TArtistProps) => {
           <Text locale={locale} text="messages.loading" />
         </div>
       )}
-      {error && <ErrorComponent message={error} />}
+      {error && <ErrorComponent message={error} locale={locale} />}
       {sortedArtists && (
         <div>
           <div className="relative overflow-x-auto">

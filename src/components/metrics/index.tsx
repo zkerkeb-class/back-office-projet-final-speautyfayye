@@ -1,5 +1,6 @@
 'use client';
 
+import useTranslation from '@/customHook/useTranslation';
 import {
   fetchAllMetrics,
   type RequestMetrics,
@@ -9,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const Metrics = ({ locale }: { locale: string }) => {
+  const { t } = useTranslation(locale);
   const [systemMetrics, setSystemMetrics] = useState<SystemMetrics | null>(null);
   const [requestMetrics, setRequestMetrics] = useState<RequestMetrics | null>(null);
   const router = useRouter();
@@ -40,21 +42,34 @@ const Metrics = ({ locale }: { locale: string }) => {
       <div className="grid grid-cols-2 gap-4 md:grid-cols-2">
         {/* Métriques Système */}
         <div className="rounded-lg bg-white p-4 shadow">
-          <h2 className="mb-4 text-xl font-bold">Métriques Système</h2>
+          <h2 className="mb-4 text-xl font-bold">{t('metrics.sysmet')}</h2>
           {systemMetrics && (
             <>
               <div className="space-y-2">
-                <h3 className="font-semibold">Mémoire</h3>
-                <p>Heap Utilisé: {systemMetrics.memory.heapUsed}</p>
-                <p>Heap Total: {systemMetrics.memory.heapTotal}</p>
-                <p>RSS: {systemMetrics.memory.rss}</p>
+                <h3 className="font-semibold">{t('metrics.memory')}</h3>
+                <p>
+                  {t('metrics.usedHeap')}: {systemMetrics.memory.heapUsed}
+                </p>
+                <p>
+                  {t('metrics.totalHeap')}: {systemMetrics.memory.heapTotal}
+                </p>
+                <p>
+                  {t('metrics.rss')}: {systemMetrics.memory.rss}
+                </p>
               </div>
               <div className="mt-4 space-y-2">
-                <h3 className="font-semibold">CPU</h3>
-                <p>User: {(systemMetrics.cpu.user / 1000000).toFixed(2)}s</p>
-                <p>System: {(systemMetrics.cpu.system / 1000000).toFixed(2)}s</p>
+                <h3 className="font-semibold">{t('metrics.cpu')}</h3>
+                <p>
+                  {t('metrics.user')}: {(systemMetrics.cpu.user / 1000000).toFixed(2)}s
+                </p>
+                <p>
+                  {t('metrics.system')}: {(systemMetrics.cpu.system / 1000000).toFixed(2)}s
+                </p>
               </div>
-              <p className="mt-4">Uptime: {(systemMetrics.uptime / 3600).toFixed(2)} heures</p>
+              <p className="mt-4">
+                {t('metrics.uptime')}: {(systemMetrics.uptime / 3600).toFixed(2)}
+                {t('metrics.hours')}
+              </p>
             </>
           )}
         </div>

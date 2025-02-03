@@ -1,6 +1,18 @@
 'use client';
 
+import ErrorComponent from '@/components/error';
 import Text from '@/components/textLocale';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import useTranslation from '@/customHook/useTranslation';
 import { AppDispatch, RootState } from '@/store';
 import { createArtist } from '@/store/slices/artistSlice';
@@ -8,18 +20,6 @@ import { fetchAllCategories } from '@/store/slices/categorySlice';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
 
 interface CreateArtistFormProps {
   locale: string;
@@ -58,9 +58,9 @@ const CreateArtistForm = ({ locale }: CreateArtistFormProps) => {
   }, [dispatch]);
 
   return (
-    <Card className="w-[400px] mx-auto mt-10">
+    <Card className="mx-auto mt-10 w-[400px]">
       <CardHeader>
-        <h2 className="text-2xl font-bold text-center">
+        <h2 className="text-center text-2xl font-bold">
           <Text locale={locale} text="title.form_create_artist" />
         </h2>
       </CardHeader>
@@ -70,12 +70,7 @@ const CreateArtistForm = ({ locale }: CreateArtistFormProps) => {
             <Label htmlFor="name">
               <Text locale={locale} text="tables.key.name" />
             </Label>
-            <Input
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
+            <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required />
           </div>
 
           <div className="space-y-2">
@@ -103,32 +98,19 @@ const CreateArtistForm = ({ locale }: CreateArtistFormProps) => {
             <Label htmlFor="bio">
               <Text locale={locale} text="tables.key.bio" />
             </Label>
-            <Input
-              id="bio"
-              value={bio}
-              onChange={(e) => setBio(e.target.value)}
-              required
-            />
+            <Input id="bio" value={bio} onChange={(e) => setBio(e.target.value)} required />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="picture">
               <Text locale={locale} text="tables.key.picture" />
             </Label>
-            <Input
-              id="picture"
-              value={picture}
-              onChange={(e) => setPicture(e.target.value)}
-            />
+            <Input id="picture" value={picture} onChange={(e) => setPicture(e.target.value)} />
           </div>
         </CardContent>
 
         <CardFooter>
-          <Button 
-            type="submit" 
-            disabled={loading}
-            className="w-full"
-          >
+          <Button type="submit" disabled={loading} className="w-full">
             {loading ? (
               <Text locale={locale} text="create.loading" />
             ) : (
@@ -137,7 +119,7 @@ const CreateArtistForm = ({ locale }: CreateArtistFormProps) => {
           </Button>
         </CardFooter>
       </form>
-      {error && <p className="text-red-500 text-center mt-2">{error}</p>}
+      {error && <ErrorComponent message={error} locale={locale} />}
     </Card>
   );
 };

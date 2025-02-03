@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import Text from '../textLocale';
 
 export default function LoginForm({ locale }: { locale: string }) {
   const router = useRouter();
@@ -31,9 +32,17 @@ export default function LoginForm({ locale }: { locale: string }) {
 
   return (
     <form className="flex flex-col items-center justify-center gap-2" onSubmit={login}>
-      <input type="text" name="email" placeholder="Adresse mail" />
-      <input type="password" name="password" placeholder="Mot de passe" />
-      <button type="submit">Se connecter</button>
+      <div className="flex">
+        <Text locale={locale} text="login.email" style="pr-2" />
+        <input type="text" name="email" placeholder="Adresse mail" />
+      </div>
+      <div className="flex">
+        <Text locale={locale} text="login.password" style="pr-2" />
+        <input type="password" name="password" placeholder="Mot de passe" />
+      </div>
+      <button type="submit">
+        <Text locale={locale} text="login.submit" />
+      </button>
     </form>
   );
 }

@@ -1,5 +1,6 @@
 'use client';
 
+import ErrorComponent from '@/components/error';
 import Text from '@/components/textLocale';
 import { AppDispatch, RootState } from '@/store';
 import { createPlaylist } from '@/store/slices/playlistSlice';
@@ -61,7 +62,7 @@ const CreatePlaylistForm = ({ locale }: createPlaylistFormProps) => {
           )}
         </button>
       </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <ErrorComponent message={error} locale={locale} />}
     </div>
   );
 };

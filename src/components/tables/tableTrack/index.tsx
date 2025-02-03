@@ -2,9 +2,10 @@
 
 import StreamImage from '@/components/streamImage';
 import { AppDispatch, RootState } from '@/store'; // Assurez-vous que AppDispatch est correctement configuré
-import { deleteTrack } from '@/store/slices/trackSlice';
+import { deleteTrack, Track } from '@/store/slices/trackSlice';
 import { formatDuration } from '@/utils/helpers';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ErrorComponent from '../../error';
 import Text from '../../textLocale';
@@ -17,6 +18,12 @@ const TableTrack = ({ locale }: TAlbumProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { tracks, loading, error } = useSelector((state: RootState) => state.selectedTrack);
   const { categories } = useSelector((state: RootState) => state.selectedCategory);
+  const [sortedTracks, setSortedTracks] = useState<Track[]>(tracks || []);
+
+  useEffect(() => {
+    if (!tracks) return;
+    setSortedTracks([...tracks].sort((a, b) => a.id - b.id));
+  }, [tracks]);
 
   return (
     <div>
@@ -32,14 +39,14 @@ const TableTrack = ({ locale }: TAlbumProps) => {
           <Text locale={locale} text="messages.loading" />
         </div>
       )}
-      {error && <ErrorComponent message={error} />}
-      {tracks && (
+      {error && <ErrorComponent message={error} locale={locale} />}
+      {sortedTracks && (
         <div className="relative overflow-x-auto">
           <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
             <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                {tracks.length > 0 &&
-                  Object.keys(tracks[0]).map((key) => (
+                {sortedTracks.length > 0 &&
+                  Object.keys(sortedTracks[0]).map((key) => (
                     <th key={key} className="px-6 py-3">
                       <Text locale={locale} text={`tables.key.${key}`} />
                     </th>
@@ -50,8 +57,8 @@ const TableTrack = ({ locale }: TAlbumProps) => {
               </tr>
             </thead>
             <tbody>
-              {Array.isArray(tracks) && tracks.length > 0
-                ? tracks.map((row, index) => (
+              {Array.isArray(sortedTracks) && sortedTracks.length > 0
+                ? sortedTracks.map((row, index) => (
                     <tr
                       key={index}
                       className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -99,7 +106,7 @@ const TableTrack = ({ locale }: TAlbumProps) => {
                       </td>
                     </tr>
                   ))
-                : tracks.length == 0 && (
+                : sortedTracks.length == 0 && (
                     <tr>
                       <td colSpan={12}>
                         <Text locale={locale} text="tables.tracks.unavailable" />
