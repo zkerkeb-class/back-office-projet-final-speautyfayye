@@ -54,8 +54,6 @@ export const fetchAllArtists = createAsyncThunk(
         throw new Error('Failed to fetch artists');
       }
       const data = await response.json();
-      console.log('🚀 ~ data:', data);
-
       return data.data as Artist[]; // Retourne la liste des artistes
     } catch (error) {
       return rejectWithValue(error);

@@ -39,8 +39,6 @@ export const fetchUserPlaylists = createAsyncThunk(
         throw new Error('Failed to fetch user playlists');
       }
       const data = await response.json();
-      console.log('🚀 ~ data:', data.data);
-
       return data.data as Playlist[]; // Retourne les Playlists de l'utilisateur
     } catch (error) {
       return rejectWithValue(error);

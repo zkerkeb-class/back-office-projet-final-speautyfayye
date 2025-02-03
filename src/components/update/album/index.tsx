@@ -85,8 +85,6 @@ const UpdateAlbumForm = ({ id, locale }: UpdateAlbumFormProps) => {
             id="categoryId"
             value={categoryId ?? ''}
             onChange={(e) => {
-              console.log(e.target.value);
-
               setCategoryId(Number(e.target.value));
             }}
             required
