@@ -51,7 +51,6 @@ export const fetchAllAlbums = createAsyncThunk(
         throw new Error('Failed to fetch albums');
       }
       const data = await response.json();
-      console.log('🚀 ~ data.data:', data.data);
       return data.data as Album[];
     } catch (error) {
       return rejectWithValue(error);

@@ -3,7 +3,6 @@ import { defaultLocale } from './utils/constants';
 
 export async function middleware(req: NextRequest) {
   let { pathname } = req.nextUrl;
-  console.log('🚀 ~ middleware ~ pathname:', pathname);
 
   let locale = pathname.split('/')[1];
 
@@ -11,7 +10,6 @@ export async function middleware(req: NextRequest) {
     pathname = `/${defaultLocale}${pathname}`;
     locale = defaultLocale;
   }
-  console.log('🚀 ~ middleware ~ locale:', locale);
 
   const requestHeaders = new Headers(req.headers);
   requestHeaders.set('locale', locale);

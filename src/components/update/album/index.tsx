@@ -123,50 +123,6 @@ const UpdateAlbumForm = ({ id, locale }: UpdateAlbumFormProps) => {
         </CardContent>
       </form>
     </Card>
-    // <div>
-    //   {loading && (
-    //     <div>
-    //       <Text locale={locale} text="update.loading" />
-    //     </div>
-    //   )}
-    //   {error && <ErrorComponent message={error} locale={locale} />}
-    //   <form onSubmit={handleSubmit}>
-    //     <div className="flex">
-    //       <Text locale={locale} text="tables.key.title" />
-    //       <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
-    //     </div>
-    //     <div className="flex">
-    //       <Text locale={locale} text="tables.key.category_id" />:
-    //       <select
-    //         id="categoryId"
-    //         value={categoryId ?? ''}
-    //         onChange={(e) => {
-    //           console.log(e.target.value);
-
-    //           setCategoryId(Number(e.target.value));
-    //         }}
-    //         required
-    //       >
-    //         <option value="" disabled>
-    //           {t('select.category')}
-    //         </option>
-    //         {categories &&
-    //           categories.map((category) => (
-    //             <option key={category.id} value={category.id}>
-    //               {category.name}
-    //             </option>
-    //           ))}
-    //       </select>
-    //     </div>
-    //     <div className="flex">
-    //       <Text locale={locale} text="tables.key.picture" />:
-    //       <input type="file" onChange={(e) => handleFileChange(e, Number(id))} />
-    //     </div>
-    //     <button type="submit">
-    //       <Text locale={locale} text="update.album" />
-    //     </button>
-    //   </form>
-    // </div>
   );
 };
 

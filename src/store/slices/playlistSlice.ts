@@ -37,8 +37,6 @@ export const fetchPlaylist = createAsyncThunk(
         throw new Error('Failed to fetch playlist');
       }
       const data = await response.json();
-      console.log('🚀 ~ data:', data);
-
       return data.data as Playlist; // Retourne l'Playlist
     } catch (error) {
       return rejectWithValue(error);
@@ -50,10 +48,6 @@ export const fetchAllPlaylists = createAsyncThunk(
   'selectedPlaylist/fetchAllPlaylists',
   async (_, { rejectWithValue }) => {
     try {
-      console.log(
-        '🚀 ~ `${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.PLAYLIST}`:',
-        `${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.PLAYLIST}`,
-      );
       const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.PLAYLIST}`);
       if (!response.ok) {
         throw new Error('Failed to fetch playlists');
@@ -206,7 +200,6 @@ const selectedPlaylistSlice = createSlice({
         state.playlists = state.playlists
           ? state.playlists.filter((playlist) => playlist.id !== action.payload)
           : null;
-        console.log(state.playlists, action);
       })
       .addCase(deletePlaylist.rejected, (state) => {
         state.loading = false;
