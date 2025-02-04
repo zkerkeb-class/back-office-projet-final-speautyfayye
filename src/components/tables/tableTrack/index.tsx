@@ -11,6 +11,8 @@ import ErrorComponent from '../../error';
 import Text from '../../textLocale';
 import SearchBar from '@/components/searchBar';
 import useTranslation from '@/customHook/useTranslation';
+import { Button } from '@/components/ui/button';
+import { ArrowUpDown } from 'lucide-react';
 
 interface TAlbumProps {
   locale: string;
@@ -24,6 +26,10 @@ const TableTrack = ({ locale }: TAlbumProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredTracks, setFilteredTracks] = useState<Track[]>([]);
   const { t } = useTranslation(locale);
+  const [sortConfig, setSortConfig] = useState({
+    key: 'title',
+    direction: 'asc'
+  });
 
   useEffect(() => {
     if (!tracks) return;
@@ -40,6 +46,35 @@ const TableTrack = ({ locale }: TAlbumProps) => {
     setFilteredTracks(filtered);
   };
 
+  const handleSort = (key: string) => {
+    const direction = sortConfig.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc';
+    setSortConfig({ key, direction });
+
+    const sorted = [...filteredTracks].sort((a, b) => {
+      switch (key) {
+        case 'title':
+          return direction === 'asc' 
+            ? a.title.localeCompare(b.title)
+            : b.title.localeCompare(a.title);
+        case 'duration':
+          return direction === 'asc'
+            ? (a.duration || 0) - (b.duration || 0)
+            : (b.duration || 0) - (a.duration || 0);
+        case 'releaseDate':
+          return direction === 'asc'
+            ? new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime()
+            : new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime();
+        case 'popularity':
+          return direction === 'asc'
+            ? a.number_of_plays - b.number_of_plays
+            : b.number_of_plays - a.number_of_plays;
+        default:
+          return 0;
+      }
+    });
+    setFilteredTracks(sorted);
+  };
+
   return (
     <div>
       <h1 className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
@@ -50,10 +85,50 @@ const TableTrack = ({ locale }: TAlbumProps) => {
         />
       </h1>
 
-      <SearchBar
-        placeholder={t('search.track')}
-        onSearch={handleSearch}
-      />
+      <div className="flex items-center justify-between px-4 py-2">
+        <SearchBar
+          placeholder={t('search.track')}
+          onSearch={handleSearch}
+        />
+        <div className="flex items-center gap-2 ml-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleSort('title')}
+            className="whitespace-nowrap"
+          >
+            <Text locale={locale} text="tables.key.title" />
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleSort('duration')}
+            className="whitespace-nowrap"
+          >
+            <Text locale={locale} text="tables.key.duration" />
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleSort('releaseDate')}
+            className="whitespace-nowrap"
+          >
+            <Text locale={locale} text="tables.key.releaseDate" />
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleSort('popularity')}
+            className="whitespace-nowrap"
+          >
+            <Text locale={locale} text="tables.key.number_of_plays" />
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
+      </div>
 
       {loading && (
         <div>
