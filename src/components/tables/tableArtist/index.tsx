@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ErrorComponent from '../../error';
 import Text from '../../textLocale';
+import SearchBar from '@/components/searchBar';
+import useTranslation from '@/customHook/useTranslation';
 
 interface TArtistProps {
   locale: string;
@@ -18,11 +20,24 @@ const TableArtist = ({ locale }: TArtistProps) => {
   const { artists, loading, error } = useSelector((state: RootState) => state.selectedArtist);
   const { categories } = useSelector((state: RootState) => state.selectedCategory);
   const [sortedArtists, setSortedArtists] = useState<Artist[]>(artists || []);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredArtists, setFilteredArtists] = useState<Artist[]>([]);
+  const { t } = useTranslation(locale);
 
   useEffect(() => {
     if (!artists) return;
-    setSortedArtists([...artists].sort((a, b) => a.id - b.id));
+    const sorted = [...artists].sort((a, b) => a.id - b.id);
+    setSortedArtists(sorted);
+    setFilteredArtists(sorted);
   }, [artists]);
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    const filtered = sortedArtists.filter((artist) =>
+      artist.name.toLowerCase().includes(term.toLowerCase())
+    );
+    setFilteredArtists(filtered);
+  };
 
   return (
     <div>
@@ -33,20 +48,26 @@ const TableArtist = ({ locale }: TArtistProps) => {
           style="whitespace-nowrap px-6 py-2 font-medium text-gray-900 dark:text-white"
         />
       </h1>
+
+      <SearchBar
+        placeholder={t('search.artist')}
+        onSearch={handleSearch}
+      />
+
       {loading && (
         <div>
           <Text locale={locale} text="messages.loading" />
         </div>
       )}
       {error && <ErrorComponent message={error} locale={locale} />}
-      {sortedArtists && (
+      {filteredArtists && (
         <div>
           <div className="relative overflow-x-auto">
             <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
               <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                  {sortedArtists.length > 0 &&
-                    Object.keys(sortedArtists[0]).map((colKey) => (
+                  {filteredArtists.length > 0 &&
+                    Object.keys(filteredArtists[0]).map((colKey) => (
                       <th key={colKey} className="px-6 py-3">
                         <Text locale={locale} text={`tables.key.${colKey}`} />
                       </th>
@@ -57,8 +78,8 @@ const TableArtist = ({ locale }: TArtistProps) => {
                 </tr>
               </thead>
               <tbody>
-                {Array.isArray(sortedArtists) && sortedArtists.length > 0
-                  ? sortedArtists.map((artist, index) => (
+                {Array.isArray(filteredArtists) && filteredArtists.length > 0
+                  ? filteredArtists.map((artist, index) => (
                       <tr
                         key={index}
                         className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -97,9 +118,9 @@ const TableArtist = ({ locale }: TArtistProps) => {
                         </td>
                       </tr>
                     ))
-                  : sortedArtists.length == 0 && (
+                  : (
                       <tr>
-                        <td colSpan={6}>
+                        <td colSpan={6} className="text-center py-4">
                           <Text locale={locale} text="tables.artists.unavailable" />
                         </td>
                       </tr>
