@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ErrorComponent from '../../error';
 import Text from '../../textLocale';
+import SearchBar from '@/components/searchBar';
+import useTranslation from '@/customHook/useTranslation';
 
 interface TAlbumProps {
   locale: string;
@@ -18,11 +20,24 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
   const { albums, loading, error } = useSelector((state: RootState) => state.selectedAlbum);
   const { categories } = useSelector((state: RootState) => state.selectedCategory);
   const [sortedAlbums, setSortedAlbums] = useState<Album[]>(albums || []);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredAlbums, setFilteredAlbums] = useState<Album[]>([]);
+  const { t } = useTranslation(locale);
 
   useEffect(() => {
     if (!albums) return;
-    setSortedAlbums([...albums].sort((a, b) => a.id - b.id));
+    const sorted = [...albums].sort((a, b) => a.id - b.id);
+    setSortedAlbums(sorted);
+    setFilteredAlbums(sorted);
   }, [albums]);
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    const filtered = sortedAlbums.filter((album) =>
+      album.title.toLowerCase().includes(term.toLowerCase())
+    );
+    setFilteredAlbums(filtered);
+  };
 
   return (
     <div>
@@ -33,19 +48,25 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
           style="whitespace-nowrap px-6 py-2 font-medium text-gray-900 dark:text-white"
         />
       </h1>
+
+      <SearchBar
+        placeholder={t('search.album')}
+        onSearch={handleSearch}
+      />
+
       {loading && (
         <div>
           <Text locale={locale} text="messages.loading" />
         </div>
       )}
       {error && <ErrorComponent message={error} locale={locale} />}
-      {sortedAlbums && (
+      {filteredAlbums && (
         <div className="relative overflow-x-auto">
           <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
             <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                {sortedAlbums.length > 0 &&
-                  Object.keys(sortedAlbums[0]).map((key) => (
+                {filteredAlbums.length > 0 &&
+                  Object.keys(filteredAlbums[0]).map((key) => (
                     <th key={key} className="px-6 py-3">
                       <Text locale={locale} text={`tables.key.${key}`} />
                     </th>
@@ -56,8 +77,8 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
               </tr>
             </thead>
             <tbody>
-              {Array.isArray(sortedAlbums) && sortedAlbums.length > 0
-                ? sortedAlbums.map((row, index) => (
+              {Array.isArray(filteredAlbums) && filteredAlbums.length > 0
+                ? filteredAlbums.map((row, index) => (
                     <tr
                       key={index}
                       className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -94,9 +115,9 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
                       </td>
                     </tr>
                   ))
-                : sortedAlbums.length == 0 && (
+                : (
                     <tr>
-                      <td colSpan={6}>
+                      <td colSpan={6} className="text-center py-4">
                         <Text locale={locale} text="tables.albums.unavailable" />
                       </td>
                     </tr>

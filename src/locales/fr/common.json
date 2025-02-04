@@ -27,7 +27,7 @@
     "users": "Utilisateurs",
     "album": "Albums",
     "artist": "Artistes",
-    "track": "musiques"
+    "track": "Musiques"
   },
   "select": {
     "category": "Sélectionner une catégorie"
@@ -129,5 +129,12 @@
     "system": "Système",
     "uptime": "Durée de fonctionnement",
     "hours": "Heures"
+  },
+  "search": {
+    "playlist": "Rechercher une playlist...",
+    "album": "Rechercher un album...",
+    "artist": "Rechercher un artiste...",
+    "track": "Rechercher une musique..."
   }
+
 }

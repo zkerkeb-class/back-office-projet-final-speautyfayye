@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ErrorComponent from '../../error';
 import Text from '../../textLocale';
+import SearchBar from '@/components/searchBar';
+import useTranslation from '@/customHook/useTranslation';
 
 interface TPlaylistProps {
   locale: string;
@@ -16,11 +18,24 @@ const TablePlaylist = ({ locale }: TPlaylistProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { playlists, loading, error } = useSelector((state: RootState) => state.selectedPlaylist);
   const [sortedPlaylists, setSortedPlaylists] = useState<Playlist[]>(playlists || []);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredPlaylists, setFilteredPlaylists] = useState<Playlist[]>([]);
+  const { t } = useTranslation(locale);
 
   useEffect(() => {
     if (!playlists) return;
-    setSortedPlaylists([...playlists].sort((a, b) => a.id - b.id));
+    const sorted = [...playlists].sort((a, b) => a.id - b.id);
+    setSortedPlaylists(sorted);
+    setFilteredPlaylists(sorted);
   }, [playlists]);
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    const filtered = sortedPlaylists.filter((playlist) =>
+      playlist.title.toLowerCase().includes(term.toLowerCase())
+    );
+    setFilteredPlaylists(filtered);
+  };
 
   return (
     <div>
@@ -31,13 +46,20 @@ const TablePlaylist = ({ locale }: TPlaylistProps) => {
           style="whitespace-nowrap px-6 py-2 font-medium text-gray-900 dark:text-white"
         />
       </h1>
+
+      <SearchBar
+        placeholder={t('search.playlist')}
+        onSearch={handleSearch}
+      />
+
       {loading && (
         <div>
           <Text locale={locale} text="messages.loading" />
         </div>
       )}
       {error && <ErrorComponent message={error} locale={locale} />}
-      {sortedPlaylists && (
+      
+      {filteredPlaylists && (
         <div className="relative overflow-x-auto">
           <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
             <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
@@ -54,8 +76,8 @@ const TablePlaylist = ({ locale }: TPlaylistProps) => {
               </tr>
             </thead>
             <tbody>
-              {Array.isArray(sortedPlaylists) && sortedPlaylists.length > 0
-                ? sortedPlaylists.map((row, index) => (
+              {Array.isArray(filteredPlaylists) && filteredPlaylists.length > 0
+                ? filteredPlaylists.map((row, index) => (
                     <tr
                       key={index}
                       className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -76,9 +98,9 @@ const TablePlaylist = ({ locale }: TPlaylistProps) => {
                       </td>
                     </tr>
                   ))
-                : sortedPlaylists.length == 0 && (
+                : (
                     <tr>
-                      <td colSpan={4}>
+                      <td colSpan={4} className="text-center py-4">
                         <Text locale={locale} text="tables.playlists.unavailable" />
                       </td>
                     </tr>
