@@ -115,7 +115,7 @@ const UpdateAlbumForm = ({ id, locale }: UpdateAlbumFormProps) => {
             <Label htmlFor="picture">
               <Text locale={locale} text="tables.key.picture" />
             </Label>
-            <Input type="file" onChange={(e) => handleFileChange(e, Number(id))} />
+            <Input type="file" accept="image/*" onChange={(e) => handleFileChange(e, Number(id))} />
           </div>
           <Button type="submit">
             <Text locale={locale} text="update.album" />

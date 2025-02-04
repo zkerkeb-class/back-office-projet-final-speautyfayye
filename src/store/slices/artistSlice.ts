@@ -87,9 +87,12 @@ export const deleteArtist = createAsyncThunk(
   'selectedArtist/deleteArtist',
   async (artistId: number, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.ARTIST}`, {
-        method: 'DELETE',
-      }); // TODO: A finir quand API prête
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.ARTIST}${artistId}`,
+        {
+          method: 'DELETE',
+        },
+      ); // TODO: A finir quand API prête
       if (!response.ok) {
         throw new Error('Failed to delete artist');
       }

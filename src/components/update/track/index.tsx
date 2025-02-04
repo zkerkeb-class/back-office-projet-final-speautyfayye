@@ -23,13 +23,11 @@ const UpdateTrackForm = ({ locale, id }: UpdateTrackFormProps) => {
   const { track, loading, error } = useSelector((state: RootState) => state.selectedTrack);
 
   const [title, setTitle] = useState('');
-  const [duration, setDuration] = useState<number | undefined>(undefined);
   const [releaseDate, setReleaseDate] = useState('');
   const [trackNumber, setTrackNumber] = useState(0);
   const [albumId, setAlbumId] = useState(0);
   const [categoryId, setCategoryId] = useState(0);
   const [picture, setPicture] = useState<string | undefined>(undefined);
-  const [audio, setAudio] = useState('');
   const [numberOfPlays, setNumberOfPlays] = useState(0);
   const [lyrics, setLyrics] = useState<string | undefined>(undefined);
 
@@ -40,13 +38,11 @@ const UpdateTrackForm = ({ locale, id }: UpdateTrackFormProps) => {
   useEffect(() => {
     if (track) {
       setTitle(track.title);
-      setDuration(track.duration);
       setReleaseDate(track.releaseDate.toString().split('T')[0]);
       setTrackNumber(track.trackNumber);
       setAlbumId(track.album_id);
       setCategoryId(track.category_id);
       setPicture(track.picture);
-      setAudio(track.audio);
       setNumberOfPlays(track.number_of_plays);
       setLyrics(track.lyrics);
     }
@@ -54,16 +50,13 @@ const UpdateTrackForm = ({ locale, id }: UpdateTrackFormProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const updatedTrack = {
+    const updatedTrack: any = {
       id: Number(id),
       title,
-      duration,
       releaseDate: new Date(releaseDate),
       trackNumber,
       album_id: albumId,
       category_id: categoryId,
-      picture,
-      audio,
       number_of_plays: numberOfPlays,
       lyrics,
     };
@@ -99,18 +92,6 @@ const UpdateTrackForm = ({ locale, id }: UpdateTrackFormProps) => {
               <Text locale={locale} text="tables.key.title" />
             </Label>
             <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="duration">
-              <Text locale={locale} text="tables.key.duration" />
-            </Label>
-            <Input
-              type="number"
-              id="duration"
-              value={duration ?? ''}
-              onChange={(e) => setDuration(Number(e.target.value))}
-            />
           </div>
 
           <div className="space-y-2">
@@ -166,25 +147,6 @@ const UpdateTrackForm = ({ locale, id }: UpdateTrackFormProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="picture">
-              <Text locale={locale} text="tables.key.picture" />
-            </Label>
-            <Input
-              id="picture"
-              value={picture || ''}
-              type="file"
-              onChange={(e) => handleFileChange(e, Number(id))}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="audio">
-              <Text locale={locale} text="tables.key.audio" />
-            </Label>
-            <Input id="audio" value={audio} onChange={(e) => setAudio(e.target.value)} required />
-          </div>
-
-          <div className="space-y-2">
             <Label htmlFor="numberOfPlays">
               <Text locale={locale} text="tables.key.number_of_plays" />
             </Label>
@@ -218,6 +180,21 @@ const UpdateTrackForm = ({ locale, id }: UpdateTrackFormProps) => {
             )}
           </Button>
         </CardFooter>
+
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="picture">
+              <Text locale={locale} text="tables.key.picture" />
+            </Label>
+            <Input
+              id="picture"
+              value={picture || ''}
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileChange(e, Number(id))}
+            />
+          </div>
+        </CardContent>
       </form>
       {error && <p className="mt-2 text-center text-red-500">{error}</p>}
     </Card>

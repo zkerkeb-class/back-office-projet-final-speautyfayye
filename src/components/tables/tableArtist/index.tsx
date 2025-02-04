@@ -58,25 +58,25 @@ const TableArtist = ({ locale }: TArtistProps) => {
               </thead>
               <tbody>
                 {Array.isArray(sortedArtists) && sortedArtists.length > 0
-                  ? sortedArtists.map((row, index) => (
+                  ? sortedArtists.map((artist, index) => (
                       <tr
                         key={index}
                         className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
                       >
-                        <td className="px-6 py-2">{row.id}</td>
+                        <td className="px-6 py-2">{artist.id}</td>
                         <td className="whitespace-nowrap px-6 py-2 font-medium text-gray-900 dark:text-white">
-                          {row.name}
+                          {artist.name}
                         </td>
                         <td className="px-6 py-2">
                           {(categories &&
-                            categories!.find((category) => category.id === row.category_id)
+                            categories!.find((category) => category.id === artist.category_id)
                               ?.name) || <Text locale={locale} text="tables.artists.noCategory" />}
                         </td>
-                        <td className="px-6 py-2">{row.bio && row.bio.substring(0, 50)}</td>
+                        <td className="px-6 py-2">{artist.bio && artist.bio.substring(0, 50)}</td>
                         <td>
-                          {row.picture ? (
+                          {artist.picture ? (
                             <>
-                              <StreamImage size={200} imageId={row.picture} />
+                              <StreamImage size={200} imageId={artist.picture} />
                               {/* <input type="file" onChange={(e) => handleFileChange(e, row.id)} /> */}
                             </>
                           ) : (
@@ -87,11 +87,11 @@ const TableArtist = ({ locale }: TArtistProps) => {
                           )}
                         </td>
                         <td className="flex items-center gap-2 px-6 py-2">
-                          <button onClick={() => dispatch(deleteArtist(row.id))}>
+                          <button onClick={() => dispatch(deleteArtist(artist.id))}>
                             <Text locale={locale} text="actions.delete" />
                           </button>
                           <p>|</p>
-                          <Link href={`/${locale}/update/artist/${row.id}`}>
+                          <Link href={`/${locale}/update/artist/${artist.id}`}>
                             <Text locale={locale} text="actions.edit" />
                           </Link>
                         </td>

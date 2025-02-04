@@ -100,13 +100,6 @@ const CreateArtistForm = ({ locale }: CreateArtistFormProps) => {
             </Label>
             <Input id="bio" value={bio} onChange={(e) => setBio(e.target.value)} required />
           </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="picture">
-              <Text locale={locale} text="tables.key.picture" />
-            </Label>
-            <Input id="picture" value={picture} onChange={(e) => setPicture(e.target.value)} />
-          </div>
         </CardContent>
 
         <CardFooter>

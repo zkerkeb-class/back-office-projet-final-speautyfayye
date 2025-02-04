@@ -134,7 +134,12 @@ const UpdateArtistForm = ({ id, locale }: UpdateArtistFormProps) => {
               <Label htmlFor="picture">
                 <Text locale={locale} text="tables.key.picture" />
               </Label>
-              <Input id="picture" type="file" onChange={(e) => handleFileChange(e, Number(id))} />
+              <Input
+                id="picture"
+                accept="image/*"
+                type="file"
+                onChange={(e) => handleFileChange(e, Number(id))}
+              />
             </div>
           </CardContent>
 

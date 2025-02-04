@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { AppDispatch, RootState } from '@/store';
-import { fetchPlaylist, Playlist, updatePlaylist } from '@/store/slices/playlistSlice';
+import { fetchPlaylist, updatePlaylist } from '@/store/slices/playlistSlice';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -39,8 +39,8 @@ const UpdatePlaylistForm = ({ id, locale }: UpdatePlaylistFormProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (playlist) {
-      const updatedPlaylist: Playlist = {
-        ...playlist,
+      const updatedPlaylist = {
+        id: playlist.id,
         title,
       };
       dispatch(updatePlaylist(updatedPlaylist))

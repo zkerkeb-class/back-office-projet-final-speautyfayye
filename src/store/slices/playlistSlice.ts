@@ -88,7 +88,7 @@ export const createPlaylist = createAsyncThunk(
 // Thunk pour mettre à jour une Playlist existante
 export const updatePlaylist = createAsyncThunk(
   'selectedPlaylist/updatePlaylist',
-  async (updatedPlaylist: Playlist, { rejectWithValue }) => {
+  async (updatedPlaylist: any, { rejectWithValue }) => {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.PLAYLIST}${updatedPlaylist.id}`,
@@ -100,6 +100,7 @@ export const updatePlaylist = createAsyncThunk(
           body: JSON.stringify(updatedPlaylist),
         },
       ); // Appel API
+      console.log('🚀 ~ response.ok:', response.status);
       if (!response.ok) {
         throw new Error('Failed to update playlist');
       }
