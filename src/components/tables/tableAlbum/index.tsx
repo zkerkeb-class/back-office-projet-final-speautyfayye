@@ -10,6 +10,8 @@ import ErrorComponent from '../../error';
 import Text from '../../textLocale';
 import SearchBar from '@/components/searchBar';
 import useTranslation from '@/customHook/useTranslation';
+import { Button } from '@/components/ui/button';
+import { ArrowUp, ArrowDown } from 'lucide-react';
 
 interface TAlbumProps {
   locale: string;
@@ -23,6 +25,10 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredAlbums, setFilteredAlbums] = useState<Album[]>([]);
   const { t } = useTranslation(locale);
+  const [sortConfig, setSortConfig] = useState({
+    key: 'title',
+    direction: 'asc'
+  });
 
   useEffect(() => {
     if (!albums) return;
@@ -39,6 +45,34 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
     setFilteredAlbums(filtered);
   };
 
+  const handleSort = (key: string) => {
+    const direction = sortConfig.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc';
+    setSortConfig({ key, direction });
+
+    const sorted = [...filteredAlbums].sort((a, b) => {
+      if (key === 'title') {
+        return direction === 'asc'
+          ? a.title.localeCompare(b.title)
+          : b.title.localeCompare(a.title);
+      } else if (key === 'releaseDate') {
+        return direction === 'asc'
+          ? new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime()
+          : new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime();
+      }
+      return 0;
+    });
+    setFilteredAlbums(sorted);
+  };
+
+  const getSortIcon = (key: string) => {
+    if (sortConfig.key !== key) return <ArrowUp className="ml-2 h-4 w-4 text-gray-400" />;
+    return sortConfig.direction === 'asc' ? (
+      <ArrowUp className="ml-2 h-4 w-4" />
+    ) : (
+      <ArrowDown className="ml-2 h-4 w-4" />
+    );
+  };
+
   return (
     <div>
       <h1 className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
@@ -49,10 +83,32 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
         />
       </h1>
 
-      <SearchBar
-        placeholder={t('search.album')}
-        onSearch={handleSearch}
-      />
+      <div className="flex items-center justify-between px-4 py-2">
+        <SearchBar
+          placeholder={t('search.album')}
+          onSearch={handleSearch}
+        />
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleSort('title')}
+            className="whitespace-nowrap"
+          >
+            <Text locale={locale} text="tables.key.title" />
+            {getSortIcon('title')}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleSort('releaseDate')}
+            className="whitespace-nowrap"
+          >
+            <Text locale={locale} text="tables.key.releaseDate" />
+            {getSortIcon('releaseDate')}
+          </Button>
+        </div>
+      </div>
 
       {loading && (
         <div>

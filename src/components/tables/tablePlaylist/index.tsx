@@ -9,6 +9,8 @@ import ErrorComponent from '../../error';
 import Text from '../../textLocale';
 import SearchBar from '@/components/searchBar';
 import useTranslation from '@/customHook/useTranslation';
+import { Button } from '@/components/ui/button';
+import { ArrowUpDown } from 'lucide-react';
 
 interface TPlaylistProps {
   locale: string;
@@ -21,6 +23,7 @@ const TablePlaylist = ({ locale }: TPlaylistProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredPlaylists, setFilteredPlaylists] = useState<Playlist[]>([]);
   const { t } = useTranslation(locale);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
   useEffect(() => {
     if (!playlists) return;
@@ -37,6 +40,16 @@ const TablePlaylist = ({ locale }: TPlaylistProps) => {
     setFilteredPlaylists(filtered);
   };
 
+  const handleSortByTitle = () => {
+    setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+    const sorted = [...filteredPlaylists].sort((a, b) => {
+      return sortDirection === 'asc' 
+        ? a.title.localeCompare(b.title)
+        : b.title.localeCompare(a.title);
+    });
+    setFilteredPlaylists(sorted);
+  };
+
   return (
     <div>
       <h1 className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
@@ -47,10 +60,21 @@ const TablePlaylist = ({ locale }: TPlaylistProps) => {
         />
       </h1>
 
-      <SearchBar
-        placeholder={t('search.playlist')}
-        onSearch={handleSearch}
-      />
+      <div className="flex items-center justify-between px-4 py-2">
+        <SearchBar
+          placeholder={t('search.playlist')}
+          onSearch={handleSearch}
+        />
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleSortByTitle}
+          className="whitespace-nowrap ml-4"
+        >
+          <Text locale={locale} text="tables.key.title" />
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      </div>
 
       {loading && (
         <div>
