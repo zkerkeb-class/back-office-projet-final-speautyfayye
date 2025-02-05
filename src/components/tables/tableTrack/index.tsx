@@ -9,6 +9,10 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ErrorComponent from '../../error';
 import Text from '../../textLocale';
+import SearchBar from '@/components/searchBar';
+import useTranslation from '@/customHook/useTranslation';
+import { Button } from '@/components/ui/button';
+import { ArrowUpDown } from 'lucide-react';
 
 interface TAlbumProps {
   locale: string;
@@ -19,11 +23,57 @@ const TableTrack = ({ locale }: TAlbumProps) => {
   const { tracks, loading, error } = useSelector((state: RootState) => state.selectedTrack);
   const { categories } = useSelector((state: RootState) => state.selectedCategory);
   const [sortedTracks, setSortedTracks] = useState<Track[]>(tracks || []);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredTracks, setFilteredTracks] = useState<Track[]>([]);
+  const { t } = useTranslation(locale);
+  const [sortConfig, setSortConfig] = useState({
+    key: 'title',
+    direction: 'asc'
+  });
 
   useEffect(() => {
     if (!tracks) return;
-    setSortedTracks([...tracks].sort((a, b) => a.id - b.id));
+    const sorted = [...tracks].sort((a, b) => a.id - b.id);
+    setSortedTracks(sorted);
+    setFilteredTracks(sorted);
   }, [tracks]);
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    const filtered = sortedTracks.filter((track) =>
+      track.title.toLowerCase().includes(term.toLowerCase())
+    );
+    setFilteredTracks(filtered);
+  };
+
+  const handleSort = (key: string) => {
+    const direction = sortConfig.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc';
+    setSortConfig({ key, direction });
+
+    const sorted = [...filteredTracks].sort((a, b) => {
+      switch (key) {
+        case 'title':
+          return direction === 'asc' 
+            ? a.title.localeCompare(b.title)
+            : b.title.localeCompare(a.title);
+        case 'duration':
+          return direction === 'asc'
+            ? (a.duration || 0) - (b.duration || 0)
+            : (b.duration || 0) - (a.duration || 0);
+        case 'releaseDate':
+          return direction === 'asc'
+            ? new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime()
+            : new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime();
+        case 'popularity':
+          return direction === 'asc'
+            ? a.number_of_plays - b.number_of_plays
+            : b.number_of_plays - a.number_of_plays;
+        default:
+          return 0;
+      }
+    });
+    setFilteredTracks(sorted);
+  };
 
   return (
     <div>
@@ -34,19 +84,65 @@ const TableTrack = ({ locale }: TAlbumProps) => {
           style="whitespace-nowrap px-6 py-2 font-medium text-gray-900 dark:text-white"
         />
       </h1>
+
+      <div className="flex items-center justify-between px-4 py-2">
+        <SearchBar
+          placeholder={t('search.track')}
+          onSearch={handleSearch}
+        />
+        <div className="flex items-center gap-2 ml-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleSort('title')}
+            className="whitespace-nowrap"
+          >
+            <Text locale={locale} text="tables.key.title" />
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleSort('duration')}
+            className="whitespace-nowrap"
+          >
+            <Text locale={locale} text="tables.key.duration" />
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleSort('releaseDate')}
+            className="whitespace-nowrap"
+          >
+            <Text locale={locale} text="tables.key.releaseDate" />
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleSort('popularity')}
+            className="whitespace-nowrap"
+          >
+            <Text locale={locale} text="tables.key.number_of_plays" />
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+
       {loading && (
         <div>
           <Text locale={locale} text="messages.loading" />
         </div>
       )}
       {error && <ErrorComponent message={error} locale={locale} />}
-      {sortedTracks && (
+      {filteredTracks && (
         <div className="relative overflow-x-auto">
           <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
             <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                {sortedTracks.length > 0 &&
-                  Object.keys(sortedTracks[0]).map((key) => (
+                {filteredTracks.length > 0 &&
+                  Object.keys(filteredTracks[0]).map((key) => (
                     <th key={key} className="px-6 py-3">
                       <Text locale={locale} text={`tables.key.${key}`} />
                     </th>
@@ -57,8 +153,8 @@ const TableTrack = ({ locale }: TAlbumProps) => {
               </tr>
             </thead>
             <tbody>
-              {Array.isArray(sortedTracks) && sortedTracks.length > 0
-                ? sortedTracks.map((row, index) => (
+              {Array.isArray(filteredTracks) && filteredTracks.length > 0
+                ? filteredTracks.map((row, index) => (
                     <tr
                       key={index}
                       className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -106,9 +202,9 @@ const TableTrack = ({ locale }: TAlbumProps) => {
                       </td>
                     </tr>
                   ))
-                : sortedTracks.length == 0 && (
+                : (
                     <tr>
-                      <td colSpan={12}>
+                      <td colSpan={12} className="text-center py-4">
                         <Text locale={locale} text="tables.tracks.unavailable" />
                       </td>
                     </tr>

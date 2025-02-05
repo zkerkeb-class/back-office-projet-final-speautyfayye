@@ -8,6 +8,10 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ErrorComponent from '../../error';
 import Text from '../../textLocale';
+import SearchBar from '@/components/searchBar';
+import useTranslation from '@/customHook/useTranslation';
+import { Button } from '@/components/ui/button';
+import { ArrowUp, ArrowDown } from 'lucide-react';
 
 interface TAlbumProps {
   locale: string;
@@ -18,11 +22,56 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
   const { albums, loading, error } = useSelector((state: RootState) => state.selectedAlbum);
   const { categories } = useSelector((state: RootState) => state.selectedCategory);
   const [sortedAlbums, setSortedAlbums] = useState<Album[]>(albums || []);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredAlbums, setFilteredAlbums] = useState<Album[]>([]);
+  const { t } = useTranslation(locale);
+  const [sortConfig, setSortConfig] = useState({
+    key: 'title',
+    direction: 'asc'
+  });
 
   useEffect(() => {
     if (!albums) return;
-    setSortedAlbums([...albums].sort((a, b) => a.id - b.id));
+    const sorted = [...albums].sort((a, b) => a.id - b.id);
+    setSortedAlbums(sorted);
+    setFilteredAlbums(sorted);
   }, [albums]);
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    const filtered = sortedAlbums.filter((album) =>
+      album.title.toLowerCase().includes(term.toLowerCase())
+    );
+    setFilteredAlbums(filtered);
+  };
+
+  const handleSort = (key: string) => {
+    const direction = sortConfig.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc';
+    setSortConfig({ key, direction });
+
+    const sorted = [...filteredAlbums].sort((a, b) => {
+      if (key === 'title') {
+        return direction === 'asc'
+          ? a.title.localeCompare(b.title)
+          : b.title.localeCompare(a.title);
+      } else if (key === 'releaseDate') {
+        return direction === 'asc'
+          ? new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime()
+          : new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime();
+      }
+      return 0;
+    });
+    setFilteredAlbums(sorted);
+  };
+
+  const getSortIcon = (key: string) => {
+    if (sortConfig.key !== key) return <ArrowUp className="ml-2 h-4 w-4 text-gray-400" />;
+    return sortConfig.direction === 'asc' ? (
+      <ArrowUp className="ml-2 h-4 w-4" />
+    ) : (
+      <ArrowDown className="ml-2 h-4 w-4" />
+    );
+  };
 
   return (
     <div>
@@ -33,19 +82,47 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
           style="whitespace-nowrap px-6 py-2 font-medium text-gray-900 dark:text-white"
         />
       </h1>
+
+      <div className="flex items-center justify-between px-4 py-2">
+        <SearchBar
+          placeholder={t('search.album')}
+          onSearch={handleSearch}
+        />
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleSort('title')}
+            className="whitespace-nowrap"
+          >
+            <Text locale={locale} text="tables.key.title" />
+            {getSortIcon('title')}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleSort('releaseDate')}
+            className="whitespace-nowrap"
+          >
+            <Text locale={locale} text="tables.key.releaseDate" />
+            {getSortIcon('releaseDate')}
+          </Button>
+        </div>
+      </div>
+
       {loading && (
         <div>
           <Text locale={locale} text="messages.loading" />
         </div>
       )}
       {error && <ErrorComponent message={error} locale={locale} />}
-      {sortedAlbums && (
+      {filteredAlbums && (
         <div className="relative overflow-x-auto">
           <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
             <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                {sortedAlbums.length > 0 &&
-                  Object.keys(sortedAlbums[0]).map((key) => (
+                {filteredAlbums.length > 0 &&
+                  Object.keys(filteredAlbums[0]).map((key) => (
                     <th key={key} className="px-6 py-3">
                       <Text locale={locale} text={`tables.key.${key}`} />
                     </th>
@@ -56,8 +133,8 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
               </tr>
             </thead>
             <tbody>
-              {Array.isArray(sortedAlbums) && sortedAlbums.length > 0
-                ? sortedAlbums.map((row, index) => (
+              {Array.isArray(filteredAlbums) && filteredAlbums.length > 0
+                ? filteredAlbums.map((row, index) => (
                     <tr
                       key={index}
                       className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -94,9 +171,9 @@ const TableAlbum = ({ locale }: TAlbumProps) => {
                       </td>
                     </tr>
                   ))
-                : sortedAlbums.length == 0 && (
+                : (
                     <tr>
-                      <td colSpan={6}>
+                      <td colSpan={6} className="text-center py-4">
                         <Text locale={locale} text="tables.albums.unavailable" />
                       </td>
                     </tr>
