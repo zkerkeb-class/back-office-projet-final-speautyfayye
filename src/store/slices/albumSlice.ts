@@ -1,5 +1,6 @@
 import { API_ROUTES } from '@/utils/constants';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { Track } from './trackSlice';
 
 export interface Album {
   id: number;
@@ -8,7 +9,7 @@ export interface Album {
   category_id: number;
   picture?: string | undefined;
   artist?: any;
-  tracks?: any;
+  tracks?: Track[];
 }
 
 interface SelectedAlbumState {
@@ -16,6 +17,14 @@ interface SelectedAlbumState {
   albums: Album[] | null;
   loading: boolean;
   error: string | null;
+}
+
+export interface UpdateAlbumTrackOrderPayload {
+  id?: number;
+  organizedTracks: {
+    id: number;
+    position: number;
+  }[];
 }
 
 const initialState: SelectedAlbumState = {
@@ -125,6 +134,34 @@ export const updateAlbum = createAsyncThunk(
   },
 );
 
+export const updateAlbumTrackOrder = createAsyncThunk(
+  'selectedAlbum/updateAlbumTrackOrder',
+  async (payload: UpdateAlbumTrackOrderPayload, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_URL_API}${API_ROUTES.ALBUM}${payload.id}/organize`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            organizedTracks: payload.organizedTracks.map((track) => [track.id, track.position]), // Transformation ici
+          }),
+        },
+      );
+      if (!response.ok) {
+        throw new Error('Failed to reorganize album tracks');
+      }
+      window.location.reload();
+
+      return;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  },
+);
+
 const selectedAlbumSlice = createSlice({
   name: 'selectedAlbum',
   initialState,
@@ -198,6 +235,17 @@ const selectedAlbumSlice = createSlice({
         state.loading = false;
       })
       .addCase(updateAlbum.rejected, (state) => {
+        state.loading = false;
+        state.error = 'Failed to update album';
+      })
+      .addCase(updateAlbumTrackOrder.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateAlbumTrackOrder.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(updateAlbumTrackOrder.rejected, (state) => {
         state.loading = false;
         state.error = 'Failed to update album';
       });

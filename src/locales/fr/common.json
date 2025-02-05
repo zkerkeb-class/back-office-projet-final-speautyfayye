@@ -4,7 +4,8 @@
     "home": "Accueil",
     "login": "Connexion",
     "dashboard": "Tableau de bord",
-    "system": "Métriques"
+    "system": "Métriques",
+    "back": "revenir sur la page précédente"
   },
   "title": {
     "form_create_playlist": "Formulaire de création de playlist",
@@ -14,7 +15,8 @@
     "form_update_playlist": "Formulaire de modification de playlist",
     "form_update_artist": "Formulaire de modification d'artiste",
     "form_update_album": "Formulaire de modification d'album",
-    "form_update_track": "Formulaire de modification de musique"
+    "form_update_track": "Formulaire de modification de musique",
+    "reorder_tracks": "Réorganiser les pistes audio"
   },
   "actions": {
     "save": "Enregistrer",

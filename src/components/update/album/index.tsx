@@ -61,11 +61,7 @@ const UpdateAlbumForm = ({ id, locale }: UpdateAlbumFormProps) => {
 
       const { artist, tracks, ...rest } = updatedAlbum;
       updatedAlbum = rest;
-      dispatch(updateAlbum(updatedAlbum))
-        .unwrap()
-        .then(() => {
-          router.push(`/${locale}/dashboard?tab=albums`);
-        });
+      dispatch(updateAlbum(updatedAlbum));
     }
   };
 

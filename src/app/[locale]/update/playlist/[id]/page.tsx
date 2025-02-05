@@ -17,9 +17,6 @@ const UpdatePlaylistPage = async ({ params }: UpdatePlaylistPageProps) => {
   return (
     <div>
       <Header locale={locale} />
-      {/* <h1>
-        <Text locale={locale} text="title.form_update_playlist" />
-      </h1> */}
       <UpdatePlaylistForm id={id} locale={locale} />
     </div>
   );

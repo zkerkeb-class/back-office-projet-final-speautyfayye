@@ -20,7 +20,7 @@ const SystemPerformancePage: React.FC = async () => {
   return (
     <div>
       <Header locale={locale} />
-      <Metrics locale={locale} /> {/*Faut pas check a l'interieur*/}
+      <Metrics locale={locale} />
     </div>
   );
 };

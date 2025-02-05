@@ -1,7 +1,9 @@
 'use server';
 
+import BackButton from '@/components/backButton';
 import Header from '@/components/header';
 import UpdateAlbumForm from '@/components/update/album';
+import UpdateAlbumOrder from '@/components/updateOrder/album';
 import { headers } from 'next/headers';
 
 interface UpdateAlbumPageProps {
@@ -17,10 +19,13 @@ const UpdateAlbumPage = async ({ params }: UpdateAlbumPageProps) => {
   return (
     <div>
       <Header locale={locale} />
-      {/* <h1>
-        <Text locale={locale} text="title.form_update_album" />
-      </h1> */}
-      <UpdateAlbumForm id={id} locale={locale} />
+      <div style={{ display: 'flex', margin: '20px 0 0 35px' }}>
+        <BackButton locale={locale} />
+      </div>
+      <div className="flex">
+        <UpdateAlbumForm id={id} locale={locale} />
+        <UpdateAlbumOrder id={id} locale={locale} />
+      </div>
     </div>
   );
 };

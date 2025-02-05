@@ -10,6 +10,7 @@
     "prepare": "node .husky/install.mjs"
   },
   "dependencies": {
+    "@hello-pangea/dnd": "^17.0.0",
     "@radix-ui/react-label": "^2.1.1",
     "@radix-ui/react-select": "^2.1.5",
     "@radix-ui/react-slot": "^1.1.1",
