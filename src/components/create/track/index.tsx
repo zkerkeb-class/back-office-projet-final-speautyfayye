@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/select';
 import useTranslation from '@/customHook/useTranslation';
 import { AppDispatch, RootState } from '@/store';
+import { fetchAlbum, fetchAllAlbums } from '@/store/slices/albumSlice';
 import { fetchAllCategories } from '@/store/slices/categorySlice';
 import { uploadAudio } from '@/utils/upload';
 import { useRouter } from 'next/navigation';
@@ -29,13 +30,16 @@ const TrackForm = ({ locale }: Props) => {
   const { t } = useTranslation(locale);
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
+  const { loading, error } = useSelector((state: RootState) => state.selectedTrack);
   const { categories } = useSelector((state: RootState) => state.selectedCategory);
+  const { albums, album } = useSelector((state: RootState) => state.selectedAlbum);
   const [id, setId] = useState<string | null>(null);
   const [duration, setDuration] = useState<number | null>(null);
-  const { loading, error } = useSelector((state: RootState) => state.selectedTrack);
 
   const handleSubmit = async (e: React.FormEvent) => {
+    if (!album?.tracks) return;
     e.preventDefault();
+
     const formData = new FormData(e.target as HTMLFormElement);
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}track`, {
@@ -43,7 +47,12 @@ const TrackForm = ({ locale }: Props) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ ...Object.fromEntries(formData), audio: id, duration }),
+      body: JSON.stringify({
+        ...Object.fromEntries(formData),
+        trackNumber: album.tracks.length + 1 || 1,
+        audio: id,
+        duration,
+      }),
     });
     if (response.ok) {
       router.push(`/${locale}/dashboard?tab=tracks`);
@@ -68,6 +77,7 @@ const TrackForm = ({ locale }: Props) => {
 
   useEffect(() => {
     dispatch(fetchAllCategories());
+    dispatch(fetchAllAlbums());
   }, [dispatch]);
 
   return (
@@ -104,7 +114,7 @@ const TrackForm = ({ locale }: Props) => {
             <Label htmlFor="category_id">
               <Text locale={locale} text="tables.key.category_id" />
             </Label>
-            <Select name="category_id">
+            <Select name="category_id" required>
               <SelectTrigger>
                 <SelectValue placeholder={t('select.category')} />
               </SelectTrigger>
@@ -120,9 +130,20 @@ const TrackForm = ({ locale }: Props) => {
 
           <div className="space-y-2">
             <Label htmlFor="album_id">
-              <Text locale={locale} text="tables.key.album_id" />
+              <Text locale={locale} text="tables.key.album" />
             </Label>
-            <Input type="number" id="album_id" name="album_id" />
+            <Select name="album_id" onValueChange={(value) => dispatch(fetchAlbum(value))} required>
+              <SelectTrigger>
+                <SelectValue placeholder={t('select.album')} />
+              </SelectTrigger>
+              <SelectContent>
+                {albums?.map((album) => (
+                  <SelectItem key={album.id} value={album.id.toString()}>
+                    {album.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="space-y-2">
