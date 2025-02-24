@@ -1,5 +1,6 @@
 import { API_ROUTES } from '@/utils/constants';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { Track } from './trackSlice';
 
 export interface Artist {
   id: number;
@@ -7,7 +8,7 @@ export interface Artist {
   category_id: number;
   bio: string;
   picture: string | undefined;
-  tracks?: any;
+  tracks?: Track[];
   albums?: any;
   category?: any;
 }

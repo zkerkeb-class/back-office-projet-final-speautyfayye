@@ -75,6 +75,13 @@ const TrackForm = ({ locale }: Props) => {
     };
   };
 
+  const handleOpenAlbum = () => {
+    if (album) {
+      // router.push(`/${locale}/preview/album/${album.id}`);
+      window.open(`/${locale}/preview/album/${album.id}`, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   useEffect(() => {
     dispatch(fetchAllCategories());
     dispatch(fetchAllAlbums());
@@ -132,18 +139,32 @@ const TrackForm = ({ locale }: Props) => {
             <Label htmlFor="album_id">
               <Text locale={locale} text="tables.key.album" />
             </Label>
-            <Select name="album_id" onValueChange={(value) => dispatch(fetchAlbum(value))} required>
-              <SelectTrigger>
-                <SelectValue placeholder={t('select.album')} />
-              </SelectTrigger>
-              <SelectContent>
-                {albums?.map((album) => (
-                  <SelectItem key={album.id} value={album.id.toString()}>
-                    {album.title}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="flex">
+              <Select
+                name="album_id"
+                onValueChange={(value) => dispatch(fetchAlbum(value))}
+                required
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder={t('select.album')} />
+                </SelectTrigger>
+                <SelectContent>
+                  {albums?.map((album) => (
+                    <SelectItem key={album.id} value={album.id.toString()}>
+                      {album.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {album && (
+                <Button className="ml-1" onClick={handleOpenAlbum}>
+                  {/* <Link href={`/${locale}/preview/album/${album.id}`} legacyBehavior>
+                    <a target="_blank">Voir l'album</a>
+                  </Link> */}
+                  voir l'album
+                </Button>
+              )}
+            </div>
           </div>
 
           <div className="space-y-2">

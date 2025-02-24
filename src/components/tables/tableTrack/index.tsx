@@ -1,18 +1,18 @@
 'use client';
 
+import SearchBar from '@/components/searchBar';
 import StreamImage from '@/components/streamImage';
+import { Button } from '@/components/ui/button';
+import useTranslation from '@/customHook/useTranslation';
 import { AppDispatch, RootState } from '@/store'; // Assurez-vous que AppDispatch est correctement configuré
 import { deleteTrack, Track } from '@/store/slices/trackSlice';
 import { formatDuration } from '@/utils/helpers';
+import { ArrowUpDown } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ErrorComponent from '../../error';
 import Text from '../../textLocale';
-import SearchBar from '@/components/searchBar';
-import useTranslation from '@/customHook/useTranslation';
-import { Button } from '@/components/ui/button';
-import { ArrowUpDown } from 'lucide-react';
 
 interface TAlbumProps {
   locale: string;
@@ -28,7 +28,7 @@ const TableTrack = ({ locale }: TAlbumProps) => {
   const { t } = useTranslation(locale);
   const [sortConfig, setSortConfig] = useState({
     key: 'title',
-    direction: 'asc'
+    direction: 'asc',
   });
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const TableTrack = ({ locale }: TAlbumProps) => {
   const handleSearch = (term: string) => {
     setSearchTerm(term);
     const filtered = sortedTracks.filter((track) =>
-      track.title.toLowerCase().includes(term.toLowerCase())
+      track.title.toLowerCase().includes(term.toLowerCase()),
     );
     setFilteredTracks(filtered);
   };
@@ -53,7 +53,7 @@ const TableTrack = ({ locale }: TAlbumProps) => {
     const sorted = [...filteredTracks].sort((a, b) => {
       switch (key) {
         case 'title':
-          return direction === 'asc' 
+          return direction === 'asc'
             ? a.title.localeCompare(b.title)
             : b.title.localeCompare(a.title);
         case 'duration':
@@ -85,12 +85,9 @@ const TableTrack = ({ locale }: TAlbumProps) => {
         />
       </h1>
 
-      <div className="flex items-center justify-between px-4 py-2">
-        <SearchBar
-          placeholder={t('search.track')}
-          onSearch={handleSearch}
-        />
-        <div className="flex items-center gap-2 ml-4">
+      <div className="flex items-center justify-between bg-gray-50 px-4 py-2">
+        <SearchBar placeholder={t('search.track')} onSearch={handleSearch} />
+        <div className="ml-4 flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
@@ -138,7 +135,7 @@ const TableTrack = ({ locale }: TAlbumProps) => {
       {error && <ErrorComponent message={error} locale={locale} />}
       {filteredTracks && (
         <div className="relative overflow-x-auto">
-          <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+          <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
             <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 {filteredTracks.length > 0 &&
@@ -153,62 +150,63 @@ const TableTrack = ({ locale }: TAlbumProps) => {
               </tr>
             </thead>
             <tbody>
-              {Array.isArray(filteredTracks) && filteredTracks.length > 0
-                ? filteredTracks.map((row, index) => (
-                    <tr
-                      key={index}
-                      className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
-                    >
-                      <td className="px-6 py-2">{row.id}</td>
-                      <td className="whitespace-nowrap px-6 py-2 font-medium text-gray-900 dark:text-white">
-                        {row.title}
-                      </td>
-                      <td className="px-6 py-2">
-                        {row.duration && formatDuration(row.duration.toString())}
-                      </td>
-                      <td className="px-6 py-2">
-                        {row.releaseDate && row.releaseDate.toString().split('T')[0]}
-                      </td>
-                      <td className="px-6 py-2">{row.trackNumber.toString()}</td>
-                      <td className="px-6 py-2">{row.number_of_plays.toString()}</td>
-                      <td className="px-6 py-2">{row.lyrics?.substring(0, 50)}</td>
-                      <td className="px-6 py-2">{row.album_id}</td>
-                      <td className="px-6 py-2">
-                        {(categories &&
-                          categories!.find((category) => category.id === row.category_id)
-                            ?.name) || <Text locale={locale} text="tables.tracks.noCategory" />}
-                      </td>
-                      <td className="px-6 py-2">
-                        {row.picture ? (
-                          <>
-                            <StreamImage size={200} imageId={row.picture} />
-                          </>
-                        ) : (
-                          <>
-                            <Text locale={locale} text="tables.tracks.noImage" />
-                          </>
-                        )}
-                      </td>
-                      <td className="px-6 py-2">{row.audio}</td>
+              {Array.isArray(filteredTracks) && filteredTracks.length > 0 ? (
+                filteredTracks.map((row, index) => (
+                  <tr
+                    key={index}
+                    className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
+                  >
+                    <td className="px-6 py-2">{row.id}</td>
+                    <td className="whitespace-nowrap px-6 py-2 font-medium text-gray-900 dark:text-white">
+                      {row.title}
+                    </td>
+                    <td className="px-6 py-2">
+                      {row.duration && formatDuration(row.duration.toString())}
+                    </td>
+                    <td className="px-6 py-2">
+                      {row.releaseDate && row.releaseDate.toString().split('T')[0]}
+                    </td>
+                    <td className="px-6 py-2">{row.trackNumber.toString()}</td>
+                    <td className="px-6 py-2">{row.number_of_plays.toString()}</td>
+                    <td className="px-6 py-2">{row.lyrics?.substring(0, 50)}</td>
+                    <td className="px-6 py-2">{row.album_id}</td>
+                    <td className="px-6 py-2">
+                      {(categories &&
+                        categories!.find((category) => category.id === row.category_id)?.name) || (
+                        <Text locale={locale} text="tables.tracks.noCategory" />
+                      )}
+                    </td>
+                    <td className="px-6 py-2">
+                      {row.picture ? (
+                        <>
+                          <StreamImage size={200} imageId={row.picture} />
+                        </>
+                      ) : (
+                        <>
+                          <Text locale={locale} text="tables.tracks.noImage" />
+                        </>
+                      )}
+                    </td>
+                    <td className="px-6 py-2">{row.audio}</td>
 
-                      <td className="flex items-center gap-2 px-6 py-2">
-                        <button onClick={() => dispatch(deleteTrack(row.id))}>
-                          <Text locale={locale} text="actions.delete" />
-                        </button>
-                        <p>|</p>
-                        <Link href={`/${locale}/update/track/${row.id}`}>
-                          <Text locale={locale} text="actions.edit" />
-                        </Link>
-                      </td>
-                    </tr>
-                  ))
-                : (
-                    <tr>
-                      <td colSpan={12} className="text-center py-4">
-                        <Text locale={locale} text="tables.tracks.unavailable" />
-                      </td>
-                    </tr>
-                  )}
+                    <td className="flex items-center gap-2 px-6 py-2">
+                      <button onClick={() => dispatch(deleteTrack(row.id))}>
+                        <Text locale={locale} text="actions.delete" />
+                      </button>
+                      <p>|</p>
+                      <Link href={`/${locale}/update/track/${row.id}`}>
+                        <Text locale={locale} text="actions.edit" />
+                      </Link>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={12} className="py-4 text-center">
+                    <Text locale={locale} text="tables.tracks.unavailable" />
+                  </td>
+                </tr>
+              )}
               <tr>
                 <td
                   colSpan={12}

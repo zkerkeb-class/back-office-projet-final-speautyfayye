@@ -16,7 +16,11 @@
     "form_update_artist": "Formulaire de modification d'artiste",
     "form_update_album": "Formulaire de modification d'album",
     "form_update_track": "Formulaire de modification de musique",
-    "reorder_tracks": "Réorganiser les pistes audio"
+    "reorder_tracks": "Réorganiser les pistes audio",
+    "albumMusic": "Musiques de l'album",
+    "artistMusic": "Musiques de l'artiste",
+    "profilPicture": "Photo de profil",
+    "cover": "Photo de couverture"
   },
   "actions": {
     "save": "Enregistrer",
@@ -85,22 +89,19 @@
       "title": "Tableau des pistes",
       "create": "Créer une piste",
       "edit": "Modifier une piste",
-      "delete": "Supprimer une piste",
-      "noImage": "Aucune image disponible"
+      "delete": "Supprimer une piste"
     },
     "albums": {
       "title": "Tableau des albums",
       "create": "Créer un album",
       "edit": "Modifier un album",
-      "delete": "Supprimer un album",
-      "noImage": "Aucune image disponible"
+      "delete": "Supprimer un album"
     },
     "artists": {
       "title": "Tableau des artistes",
       "create": "Créer un artiste",
       "edit": "Modifier un artiste",
-      "delete": "Supprimer un artiste",
-      "noCategory": "Aucune catégorie trouvée"
+      "delete": "Supprimer un artiste"
     },
     "categories": {
       "title": "Tableau des catégories",
@@ -139,5 +140,17 @@
     "album": "Rechercher un album...",
     "artist": "Rechercher un artiste...",
     "track": "Rechercher une musique..."
+  },
+  "global": {
+    "numberOfTrack": "Nombre de pistes",
+    "noCategory": "Aucune catégorie trouvée",
+    "noImage": "Aucune image disponible",
+    "imageNotLoading": "Impossible de charger l'image",
+    "showArtistImage": "Afficher la photo de l'artiste",
+    "hideArtistImage": "Masquer la photo de l'artiste",
+    "showAlbumImage": "Afficher la couverture de l'album",
+    "hideAlbumImage": "Masquer la couverture de l'album",
+    "showTrackImage": "Afficher la photo de la musique",
+    "hideTrackImage": "Masquer la photo de la musique"
   }
 }

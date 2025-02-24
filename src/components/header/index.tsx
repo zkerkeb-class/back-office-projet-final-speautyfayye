@@ -39,7 +39,10 @@ const Header = ({ locale }: HeaderProps) => {
       <nav className="ml-8 flex-1">
         <ul className="m-0 flex list-none gap-6 p-0">
           <li>
-            <Link className="font-medium text-gray-800 no-underline" href={`/${locale}/dashboard`}>
+            <Link
+              className="font-medium text-gray-800 no-underline"
+              href={`/${locale}/dashboard?tag=playlists`}
+            >
               <Text locale={locale} text="navigation.dashboard" />
             </Link>
           </li>

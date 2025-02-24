@@ -17,8 +17,10 @@ import Text from '../textLocale';
 
 interface TablePickerProps {
   locale: string;
-  tab?: 'playlists' | 'artists' | 'albums' | 'tracks';
+  tab?: ViewType;
 }
+
+type ViewType = 'playlists' | 'artists' | 'albums' | 'tracks';
 
 const TablePicker: React.FC<TablePickerProps> = ({ locale, tab = 'playlists' }) => {
   const router = useRouter();
@@ -29,8 +31,26 @@ const TablePicker: React.FC<TablePickerProps> = ({ locale, tab = 'playlists' }) 
     }
   }, []);
 
-  const [view, setView] = useState<'playlists' | 'artists' | 'albums' | 'tracks'>(tab);
+  const [view, setView] = useState<ViewType>(tab);
   const dispatch = useDispatch<AppDispatch>();
+
+  const menuItems: { key: ViewType; text: string; style?: React.CSSProperties }[] = [
+    {
+      key: 'playlists',
+      text: 'routes.playlist',
+      style: { marginTop: '0.5rem', marginRight: '0.5rem' },
+    },
+    { key: 'artists', text: 'routes.artist', style: { marginRight: '0.5rem' } },
+    { key: 'albums', text: 'routes.album', style: { marginRight: '0.5rem' } },
+    { key: 'tracks', text: 'routes.track', style: { marginRight: '0.5rem' } },
+  ];
+
+  const handleView = (view: ViewType) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('tag', view);
+    setView(view);
+    router.push(`/${locale}/dashboard?${urlParams.toString()}`);
+  };
 
   useEffect(() => {
     dispatch(fetchAllPlaylists());
@@ -42,19 +62,17 @@ const TablePicker: React.FC<TablePickerProps> = ({ locale, tab = 'playlists' }) 
 
   return (
     <div className="flex w-4/5 justify-around">
-      <div className="flex w-1/6 flex-col">
-        <button className="mr-2" onClick={() => setView('playlists')}>
-          <Text locale={locale} text="routes.playlist" style="text-left" />
-        </button>
-        <button className="mr-2" onClick={() => setView('artists')}>
-          <Text locale={locale} text="routes.artist" style="text-left" />
-        </button>
-        <button onClick={() => setView('albums')}>
-          <Text locale={locale} text="routes.album" style="text-left" />
-        </button>
-        <button onClick={() => setView('tracks')}>
-          <Text locale={locale} text="routes.track" style="text-left" />
-        </button>
+      <div className="flex w-1/6 flex-col space-y-2">
+        {menuItems.map(({ key, text, style }) => (
+          <button
+            key={key}
+            onClick={() => handleView(key)}
+            className="rounded-lg bg-gray-100 px-4 py-2 text-left font-medium text-gray-700 transition hover:bg-gray-200"
+            style={style ? style : undefined}
+          >
+            <Text locale={locale} text={text} />
+          </button>
+        ))}
       </div>
       <div className="flex-3 w-5/6">
         {view === 'playlists' && <TablePlaylist locale={locale} />}

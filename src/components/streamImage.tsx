@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import Text from './textLocale';
 
 interface IProps {
   imageId?: string;
@@ -11,6 +12,7 @@ interface IProps {
   height?: number;
   size: 200 | 400 | 800;
   alt?: string;
+  locale?: string;
 }
 
 export default function StreamImage(props: IProps) {
@@ -30,9 +32,9 @@ export default function StreamImage(props: IProps) {
               'Content-Type': 'application/json',
             },
           });
-          if (!response.ok || response.status === 204) {
-            throw new Error('Failed to fetch the image stream');
-          }
+          // if (!response.ok || response.status === 204) {
+          //   throw new Error('Failed to fetch the image stream');
+          // }
           const blob = await response.blob();
           imageUrl = URL.createObjectURL(blob);
           setImageSrc(imageUrl);
@@ -56,17 +58,16 @@ export default function StreamImage(props: IProps) {
     <>
       {isLoading ? (
         <p>Loading...</p>
+      ) : props.imageId && imageSrc ? (
+        <Image
+          className={`${props.customClasses ? props.customClasses : ''} h-full w-full`}
+          src={imageSrc}
+          alt={props.alt ?? 'Image'}
+          width={props.width ? props.width : 100}
+          height={props.height ? props.height : 100}
+        />
       ) : (
-        props.imageId &&
-        imageSrc && (
-          <Image
-            className={`${props.customClasses ? props.customClasses : ''} h-full w-full`}
-            src={imageSrc}
-            alt={props.alt ?? 'Image'}
-            width={props.width ? props.width : 100}
-            height={props.height ? props.height : 100}
-          />
-        )
+        <Text locale={props.locale || 'fr'} text="global.noImage" />
       )}
     </>
   );
